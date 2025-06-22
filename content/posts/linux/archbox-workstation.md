@@ -188,6 +188,8 @@ sudo pacman -Syu --needed mesa xf86-video-amdgpu xorg-server xorg-xinit --overwr
 sudo mkdir -p /etc/X11/xorg.conf.d
 sudo nano /etc/X11/xorg.conf.d/10-amdgpu.conf
 sudo pacman -S mesa-utils
+sudo pacman -Syu linux-firmware amd-ucode
+sudo pacman -Rns linux-firmware-nvidia
 ```
 
 ```conf
