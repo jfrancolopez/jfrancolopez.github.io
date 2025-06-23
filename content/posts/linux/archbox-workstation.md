@@ -167,12 +167,14 @@ sudo nano /etc/mkinitcpio.conf
 
 ```conf
 MODULES=(vfio_pci vfio vfio_iommu_type1 amdgpu)
+HOOKS=(modconf)
 ```
 
 Then:
 
 ```bash
 sudo mkinitcpio -P
+sudo mkinitcpio -P linux
 sudo grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
