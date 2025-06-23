@@ -189,14 +189,14 @@ sudo mkdir -p /etc/X11/xorg.conf.d
 sudo nano /etc/X11/xorg.conf.d/10-amdgpu.conf
 sudo pacman -S mesa-utils
 sudo pacman -Syu linux-firmware amd-ucode
-sudo pacman -Rns linux-firmware-nvidia
+
 ```
 
 ```conf
 Section "Device"
     Identifier "AMD"
     Driver "amdgpu"
-    BusID "PCI:11:0:0"
+    BusID "PCI:17:0:0"
 EndSection
 ```
 
