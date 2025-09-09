@@ -1,7 +1,7 @@
 +++
 title= 'Arch Linux Setup with VFIO GPU Passthrough'
 date= '2025-06-22'
-description= 'Using AMD iGPU for Host + NVIDIA RTX 4090 for VM (VFIO)'
+description= 'Using AMD iGPU for Host + NVIDIA RTX 3090 for VM (VFIO)'
 tags = ['linux', 'arch']
 
 +++

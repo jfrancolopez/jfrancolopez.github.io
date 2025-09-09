@@ -7,7 +7,8 @@ tags = ['b650', 'dram', 'ram']
 +++
 
 One of the things I’ve loved most about my career in technology is that you never stop learning. Even after a lifetime of building, programming, and troubleshooting systems, there’s always something new waiting around the corner. This past week, I was reminded of that truth while building my latest PC workstation.
-
+  <!--more-->
+  
 ---
 
 ## The Setup
