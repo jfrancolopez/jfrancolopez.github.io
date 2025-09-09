@@ -14,7 +14,8 @@ Raleigh-Durham, NC | [LinkedIn](https://www.linkedin.com/in/jfranco-lopez/) | jf
 
 ## Resumen
 
-Gerente de Technologias de la Informacion bilingüe (inglés/español) con más de 15 años de experiencia en desarrollo de software, arquitectura de infraestructura y liderazgo de TI empresarial. Experiencia en el diseño y despliegue de sistemas escalables en entornos de manufactura, logística y nube. Actualmente aprendiendo sobre el uso de modelos de lenguaje grande (LLMs) para automatización interna, documentación y herramientas para desarrolladores. Creador de la herramienta de cotizaciones de tractores de agricultura *StartBlue* (Django + React + PostgreSQL), actualmente usada por más de 350 concesionarios en EE. UU. y Canadá. Apasionado por DevOps, automatización, homelabs y proyectos open source.
+Gerente de TI y Desarrollador de Software con más de 15 años de experiencia liderando iniciativas de TI de alto impacto en entornos de manufactura, logística y corporativos. Éxito comprobado en la expansión de operaciones de TI, automatización de procesos y alineación de la tecnología con los objetivos de negocio durante periodos de crecimiento y transformación. Bilingüe en inglés y español, con excelentes habilidades de comunicación y colaboración en equipos globales y diversos. Actualmente explorando el uso de LLMs (Modelos de Lenguaje Extenso) para automatización interna, documentación y herramientas para desarrolladores. Creador de la herramienta de cotización para concesionarios *StartBlue* (Django + React + PostgreSQL), actualmente utilizada por más de 350 concesionarios en EE. UU. y Canadá. Apasionado por DevOps, automatización, programación, homelabs y software de código abierto.
+
 
 ---
 
@@ -38,16 +39,18 @@ Gerente de Technologias de la Informacion bilingüe (inglés/español) con más 
 ### **LS Tractor USA** – Gerente de TI y Desarrollador de Software  
 *Raleigh, NC / Battleboro, NC | 2022–Presente*
 
-- Liderazgo de operaciones de TI en múltiples ubicaciones en EE.UU. y Canadá, incluyendo infraestructura, ciberseguridad, redes e integraciones con ERP/SAP.  
-- Diseño y desarrollo de *StartBlue*, aplicación interna Django/React para agilizar cotizaciones de concesionarios.  
-- Implementación de segmentación VLAN, VPNs, fortalecimiento de red y sistemas de alta disponibilidad.  
-- Gestión de proyectos como vigilancia, control de accesos, movilidad en almacenes y despliegue de MDM.  
-- Construcción de clúster Kubernetes con enfoque GitOps para servicios internos y públicos.
+- Liderando las operaciones de TI en Norteamérica para una subsidiaria de LG Electronics, supervisando infraestructura multi-sitio, seguridad y estrategia en la nube en entornos de manufactura y corporativos.  
+- Encabezó la modernización, reduciendo el tiempo de inactividad en un 40% y mejorando el rendimiento del sistema en un 35% mediante mejoras en seguridad e infraestructura.  
+- Gestionó presupuestos y negociaciones con proveedores, reduciendo los gastos anuales en un 20% mientras aumentaba las capacidades de servicio.  
+- Dirigió múltiples migraciones a gran escala, incluyendo la transición de más de 200 usuarios de un AD local a Microsoft Azure, mejorando la escalabilidad en un 40% y reduciendo costos en un 30%.  
+- Logró cero incidentes de seguridad en más de 2 años, implementando MFA, firewalls de última generación, EDR y segmentación de red.  
+- Diseñó e implementó la infraestructura para dos nuevas plantas de manufactura, garantizando el cumplimiento de estándares de la industria.  
+
 
 ### **La Moderna USA** – Gerente de Tecnología de la Información  
 *Cleburne, TX | 2017–2022*
 
-- Lideró las operaciones de TI para una planta de producción de pasta de $80M, diseñando e implementando una infraestructura robusta con 99.5% de disponibilidad.  
+- Lideré las operaciones de TI para una planta de producción de pasta de $80M, diseñando e implementando una infraestructura robusta con 99.5% de disponibilidad.  
 - Prácticas de ciberseguridad, redes e infraestructura empresarial.  
 - Uso de Fusion 360, impresión 3D y electrónica (Arduino/RPi) para prototipos.  
 - Coordinación con ingenieros de automatización para integrar TI con sistemas MES y PLC.

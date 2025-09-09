@@ -17,7 +17,8 @@ Raleigh-Durham, NC | [LinkedIn](https://www.linkedin.com/in/jfranco-lopez/) | jf
 
 ## Summary
 
-Bilingual IT Manager (English/Spanish) with 15+ years of experience spanning software development, infrastructure architecture, and enterprise IT leadership. Proven track record of designing and deploying scalable systems across manufacturing, logistics, and cloud environments. Currently exploring the use of LLMs (Large Language Models) for internal automation, documentation, and developer tooling. Creator of the dealer quote tool *StartBlue* (Django + React + PostgreSQL), currently used by 350+ dealerships across the U.S. and Canada. Passionate about DevOps, automation, homelabs, and open source.
+IT Manager & Software Engineer with 15+ years of experience leading high-impact IT initiatives across manufacturing, logistics, and enterprise environments. Proven success in scaling IT operations, driving automation, and aligning IT with business goals during rapid growth and transformation. Bilingual in English and Spanish, with excellent communication and
+collaboration skills for diverse, global teams. Currently exploring the use of LLMs (Large Language Models) for internal automation, documentation, and developer tooling. Creator of the dealer quote tool *StartBlue* (Django + React + PostgreSQL), currently used by 350+ dealerships across the U.S. and Canada. Passionate about DevOps, automation, coding, homelabs, and open source.
 
 ---
 
@@ -41,11 +42,15 @@ Bilingual IT Manager (English/Spanish) with 15+ years of experience spanning sof
 ### **LS Tractor USA** – IT Manager & Software Developer  
 *Raleigh, NC / Battleboro, NC | 2022–Present*
 
-- Lead IT operations across multiple U.S. and Canadian locations, overseeing infrastructure, cybersecurity, networking, and ERP/SAP integrations.
-- Designed and developed *StartBlue*, an internal Django/React app to streamline dealer quotes.
-- Implemented VLAN segmentation, VPNs, network hardening, and high-availability systems.
-- Managed cross-office projects including surveillance, door access, warehouse mobility, and MDM deployment.
-- Built a GitOps-based Kubernetes to test and deploy scalable internal/public services.
+- Leading North American IT operations for an LG Electronics subsidiary, overseeing multi-site infrastructure, security, and
+cloud strategy for manufacturing and corporate environments.
+- Spearheaded modernization, reducing downtime by 40% and improving system performance by 35% through security
+enhancements and infrastructure upgrades.
+- Managed budgeting & vendor negotiations, cutting annual expenditures by 20% while enhancing service capabilities.
+- Led multiple large-scale migrations, including transitioning 200+ users from legacy on-prem AD to Microsoft Azure,
+improving scalability by 40% and cutting costs by 30%.
+- Achieved zero security breaches in 2+ years, implementing MFA, next-gen firewalls, EDR, and network segmentation.
+- Designed and implemented the infrastructure for two new manufacturing sites ensuring compliance with industry standards. 
 
 ### **La Moderna USA** – Information Technology Manager  
 *Cleburne, TX | 2017–2022*
