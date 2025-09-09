@@ -13,7 +13,7 @@ my notes and reference for using AMD iGPU for Host + NVIDIA RTX 4090 for VM (VFI
 * **Motherboard**: Gigabyte B650 GAMING X AX
 * **CPU**: AMD Ryzen 9 7950X3D (32 Threads)
 * **GPU 1**: AMD iGPU (Raphael)
-* **GPU 2**: NVIDIA GeForce RTX 4090 (VFIO Passthrough)
+* **GPU 2**: NVIDIA GeForce RTX 3090 (VFIO Passthrough)
   <!--more-->
 
 ---
