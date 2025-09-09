@@ -8,7 +8,7 @@ tags = ['b650', 'dram', 'ram']
 
 One of the things I’ve loved most about my career in technology is that you never stop learning. Even after a lifetime of building, programming, and troubleshooting systems, there’s always something new waiting around the corner. This past week, I was reminded of that truth while building my latest PC workstation.
 
-  
+---
 
 ## The Setup
 
@@ -27,15 +27,15 @@ My new build is based on the following components:
 
   
 On paper, everything looked straightforward. The ram is even at the official mobo support list. But once I started putting it together, I hit a problem I had never encountered before: the dreaded DRAM LED stuck during POST.
-  
 
+---
 ## The Problem
   
 
 Every time I powered on the system, the motherboard would hang on the DRAM status LED. The only way to get past it was to manually hit the reset switch (RST_SW), at which point the board would finally allow me to enter the BIOS. The memory itself wasn’t faulty—I ran MemTest86+ and confirmed both sticks were solid. This was clearly a training/compatibility issue between DDR5 and the AM5 platform.
 
   
-
+---
 ## The Solution
 
 
@@ -60,8 +60,8 @@ After experimenting with multiple options, the fix came down to:
 
 With those changes, the system trained successfully, booted reliably, and has been stable since.
 
-  
-## Reflections
+---  
+## Conclusion
   
 
 I'm writing this, because i could not find any real solution to this problem. This experience was a reminder that PC building in 2025 still isn’t completely “plug-and-play”—especially when working with new platforms like AM5 and high-capacity DDR5 kits. Even after decades in technology, I find myself learning something new every week.
