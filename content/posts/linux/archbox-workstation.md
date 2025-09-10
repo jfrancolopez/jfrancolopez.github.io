@@ -148,8 +148,17 @@ You can preinstall essentials by typing them in at this step:
 After reboot, 
 
 ```bash
-sudo pacman -S hyprland vim kitty flatpak timesh
+sudo pacman -S hyprland vim nvim kitty flatpak timeshift firefox 
+
+#start hyprland
+hyprland
+#super + M to close
+cd .config/.hypr
+vim hyprland.conf
+### 
+
 ```
+
 
 
 the system will likely default to using the **NVIDIA GPU** for display. If this happens and you want to force it to use the iGPU:
