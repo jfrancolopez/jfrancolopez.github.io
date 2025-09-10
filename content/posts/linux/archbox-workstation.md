@@ -1,8 +1,9 @@
 +++
 title= 'Arch Linux Setup with VFIO GPU Passthrough'
 date= '2025-06-22'
-description= 'Using AMD iGPU for Host + NVIDIA RTX 3090 for VM (VFIO)'
-tags = ['linux', 'arch']
+description= 'Using AMD iGPU for Host + NVIDIA RTX 4090 for VM (VFIO)'
+tags = ['linux', 'arch', 'vfio', 'hyprland']
+
 
 +++
 
@@ -10,10 +11,12 @@ my notes and reference for using AMD iGPU for Host + NVIDIA RTX 4090 for VM (VFI
 
 **System Specs:**
 
-* **Motherboard**: Gigabyte B650 GAMING X AX
+* **Motherboard**: Gigabyte B650 GAMING X AX (rev. 1.3)
 * **CPU**: AMD Ryzen 9 7950X3D (32 Threads)
-* **GPU 1**: AMD iGPU (Raphael)
-* **GPU 2**: NVIDIA GeForce RTX 3090 (VFIO Passthrough)
+* **GPU 1 (Host)**: AMD iGPU (Raphael, RDNA2)
+* **GPU 2 (Passthrough/Optional Host)**: NVIDIA GeForce RTX 4090
+* **Memory**: Corsair Vengeance DDR5 64GB (2×32GB) 5600 MHz CL40 (XMP, CMK64GX5M2B5600C40)
+* **OS**: Arch Linux (Hyprland) + Windows 11 Pro (separate disk)
   <!--more-->
 
 ---
@@ -26,8 +29,8 @@ Before installing Arch, reboot into your BIOS and configure the following settin
 * **Enable**: `ErP` (to reduce power consumption when off)
 * **Disable**: `Secure Boot`
 * **Disable**: `XMP` if you're facing memory instability
-* **Set iGPU** as the primary display output
-* **Disable**: Onboard **Bluetooth** and **Wi-Fi** (they can cause driver issues on Linux)
+* 
+
 
 ---
 
@@ -49,7 +52,7 @@ ls -l /dev/disk/by-id/
 
 ---
 
-### 2. Start Chris Titus Arch Install
+### 2. Chris Titus Arch Install (optional fast setup)
 
 ```bash
 curl -fssl christitus.com/linux | sh
@@ -61,6 +64,119 @@ Then choose:
 * Follow partitioning and installation prompts
 
 Once installation finishes, **remove the USB** and reboot.
+
+---
+
+### Step by Step archinstall
+
+When you type archinstall at the ISO shell:
+
+⸻
+
+1. Disk Layout
+
+This is where you define your partitions:
+	- Use “Manual partitioning” if you already have Windows 11 on another disk.
+	- Example layout for Arch disk:
+		- EFI: 512 MB, FAT32, mount /boot
+		- Root: rest of the disk (ext4 or btrfs) → /
+		- Swap: optional (or use zram later instead of a swap partition).
+
+VFIO + gaming:
+	- ext4 = simplest, fastest, stable.
+	- btrfs = great if you want snapshots & rollback (but a bit more tuning).
+
+⸻
+
+2. Bootloader
+	- Choose systemd-boot.
+		- Cleaner with dual boot + VFIO configs.
+	
+⸻
+
+5. Kernel
+	- Default choices:
+	- linux (mainline)
+	- linux-lts (older, stable, less good for AM5)
+	- linux-zen (desktop/gaming tuned)
+	- ✅ Select: linux-zen (primary), also add linux as fallback.
+
+⸻
+
+6. Networking
+	- Choose NetworkManager (easiest on laptops/desktops).
+	- Systemd-networkd is lighter but annoying for Wi-Fi & VPNs.
+	- Later you can install nm-applet or rofi-network-manager for Hyprland.
+
+⸻
+
+7. Audio
+	- Choose PipeWire.
+	- It replaces PulseAudio + JACK.
+	- Works better with Wayland + screen sharing + gaming.
+
+⸻
+
+8. User Account
+	- Create your main user (e.g. franco).
+	- Add to wheel group → so you can use sudo.
+	- Root password → optional but recommended.
+
+⸻
+
+9. Desktop Environment
+	- archinstall lets you pick DE/WM.
+	- Since you want Hyprland, check if it’s listed under Community editions (newer ISOs sometimes have it).
+	- If not, pick None → install Hyprland manually after first boot.
+
+⸻
+
+10. Additional Packages
+
+You can preinstall essentials by typing them in at this step:
+
+base-devel git curl wget nano htop openssh \
+seatd sddm \
+mesa vulkan-radeon lib32-vulkan-radeon \
+pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber \
+networkmanager
+
+
+⸻
+
+11. Profile
+	- Select default or minimal.
+	- Avoid server profiles since you want a workstation.
+
+⸻
+
+12. Multilib
+	- archinstall does not enable multilib automatically.
+	- After install, edit /etc/pacman.conf:
+
+[multilib]
+Include = /etc/pacman.d/mirrorlist
+
+Then:
+
+sudo pacman -Sy
+
+
+
+⸻
+
+✅ After Install
+	1.	Boot Arch from systemd-boot.
+	2.	Enable services:
+
+sudo systemctl enable --now NetworkManager seatd sddm
+
+
+	3.	Install Hyprland stack:
+
+sudo pacman -S hyprland waybar rofi wl-clipboard cliphist grim slurp wf-recorder \
+xdg-desktop-portal-hyprland xdg-desktop-portal-wlr
+
 
 ---
 
