@@ -118,7 +118,6 @@ VFIO + gaming:
 
 7. Profile
 	- minimal Environment
-	- Hyprland - SDDM
 
 ⸻
 
@@ -142,11 +141,18 @@ You can preinstall essentials by typing them in at this step:
 
 
 
----
 
+---
 ## First Boot Tasks
 
-After reboot, the system will likely default to using the **NVIDIA GPU** for display. If this happens and you want to force it to use the iGPU:
+After reboot, 
+
+```bash
+sudo pacman -S hyprland vim kitty flatpak timesh
+```
+
+
+the system will likely default to using the **NVIDIA GPU** for display. If this happens and you want to force it to use the iGPU:
 
 1. Log in via **TTY** (if screen is black or blinking): use SSH instead:
 
