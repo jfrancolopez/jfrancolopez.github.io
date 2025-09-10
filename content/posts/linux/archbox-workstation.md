@@ -332,4 +332,13 @@ https://github.com/JaKooLit/Arch-Hyprland
 
 
 
-## 💻 BONUS: Install Hyprland ()
+## 💻 BONUS: Install Hyprland (ML4W Dotfiles)
+
+```bash
+##stable release
+https://raw.githubusercontent.com/mylinuxforwork/dotfiles/main/hyprland-dotfiles-stable.dotinst
+```
+
+
+https://mylinuxforwork.github.io/dotfiles-installer/
+https://mylinuxforwork.github.io/dotfiles/
