@@ -94,49 +94,44 @@ VFIO + gaming:
 	
 ⸻
 
-5. Kernel
-	- Default choices:
-	- linux (mainline)
-	- linux-lts (older, stable, less good for AM5)
-	- linux-zen (desktop/gaming tuned)
-	- ✅ Select: linux-zen (primary), also add linux as fallback.
+3. Kernel
+	-  linux-zen (primary), add linux as fallback.
 
 ⸻
 
-6. Networking
-	- Choose NetworkManager (easiest on laptops/desktops).
-	- Systemd-networkd is lighter but annoying for Wi-Fi & VPNs.
-	- Later you can install nm-applet or rofi-network-manager for Hyprland.
+4. Networking
+	-  NetworkManager 
 
 ⸻
 
-7. Audio
+5. Audio
 	- Choose PipeWire.
-	- It replaces PulseAudio + JACK.
-	- Works better with Wayland + screen sharing + gaming.
 
 ⸻
 
-8. User Account
-	- Create your main user (e.g. franco).
-	- Add to wheel group → so you can use sudo.
-	- Root password → optional but recommended.
+6. User Account
+	- Create your main user .
+	- Add to wheel group →  use sudo.
 
 ⸻
 
-9. Desktop Environment
-	- archinstall lets you pick DE/WM.
-	- Since you want Hyprland, check if it’s listed under Community editions (newer ISOs sometimes have it).
-	- If not, pick None → install Hyprland manually after first boot.
+7. Desktop Environment
+	- Hyprland - SDDM
 
 ⸻
 
-10. Additional Packages
+8. Additional Packages
 
 You can preinstall essentials by typing them in at this step:
 
-base-devel git curl wget nano htop openssh \
-seatd sddm \
+* base-devel 
+* git 
+* curl 
+* wget 
+* nano 
+* htop 
+* openssh 
+
 mesa vulkan-radeon lib32-vulkan-radeon \
 pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber \
 networkmanager
