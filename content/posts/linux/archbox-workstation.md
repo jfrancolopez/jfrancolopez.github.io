@@ -131,46 +131,13 @@ You can preinstall essentials by typing them in at this step:
 * nano 
 * htop 
 * openssh 
-
-mesa vulkan-radeon lib32-vulkan-radeon \
-pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber \
-networkmanager
-
+* pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber 
 
 ⸻
 
-11. Profile
-	- Select default or minimal.
-	- Avoid server profiles since you want a workstation.
+9. Optional repos
+	-  enable multilib 
 
-⸻
-
-12. Multilib
-	- archinstall does not enable multilib automatically.
-	- After install, edit /etc/pacman.conf:
-
-[multilib]
-Include = /etc/pacman.d/mirrorlist
-
-Then:
-
-sudo pacman -Sy
-
-
-
-⸻
-
-✅ After Install
-	1.	Boot Arch from systemd-boot.
-	2.	Enable services:
-
-sudo systemctl enable --now NetworkManager seatd sddm
-
-
-	3.	Install Hyprland stack:
-
-sudo pacman -S hyprland waybar rofi wl-clipboard cliphist grim slurp wf-recorder \
-xdg-desktop-portal-hyprland xdg-desktop-portal-wlr
 
 
 ---
@@ -363,3 +330,6 @@ sh <(curl -L https://raw.githubusercontent.com/JaKooLit/Arch-Hyprland/main/auto-
 
 https://github.com/JaKooLit/Arch-Hyprland
 
+
+
+## 💻 BONUS: Install Hyprland ()
