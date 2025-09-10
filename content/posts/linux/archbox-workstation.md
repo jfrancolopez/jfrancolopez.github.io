@@ -110,12 +110,14 @@ VFIO + gaming:
 ⸻
 
 6. User Account
+	1. create root password
 	- Create your main user .
 	- Add to wheel group →  use sudo.
 
 ⸻
 
-7. Desktop Environment
+7. Profile
+	- minimal Environment
 	- Hyprland - SDDM
 
 ⸻
