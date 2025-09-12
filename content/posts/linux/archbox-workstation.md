@@ -132,6 +132,40 @@ Remove an old/duplicate entry:
 ```bash
 sudo bootctl remove <entry-id>
 ```
+---
+## Installing ML4W Dotfiles with Flatpak
+
+As part of my Hyprland setup, I used the **ML4W Dotfiles Installer** to quickly bring in a pre-configured environment.  
+Below are the commands and the steps I followed.
+
+```bash
+flatpak install com.ml4w.dotfilesinstaller
+```
+
+---
+
+### Installation Steps
+
+1. Open **Firefox** and visit:  
+   [https://mylinuxforwork.github.io/dotfiles](https://mylinuxforwork.github.io/dotfiles)
+
+2. Run the Flatpak installer:
+   ```bash
+   flatpak run com.ml4w.dotfilesinstaller
+   ```
+
+3. From the website, copy the script for either the **Stable** or **Rolling** release.
+
+4. Paste the script into a terminal and execute it.
+
+5. Once the script finishes, return to the installer and click **Next**.
+
+6. Adjust your display resolution.  
+   > In my case, I use **2K QHD (2560×1440)**.
+
+7. Complete the process by selecting **Install and Activate**.
+
+8. Close the installer and reboot your system.
 
 ---
 
