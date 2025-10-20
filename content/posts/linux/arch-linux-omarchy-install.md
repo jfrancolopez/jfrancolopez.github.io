@@ -107,6 +107,7 @@ DEFAULT_ENTRY=3
 
 EOF
 ```
+### useful link: https://github.com/basecamp/omarchy/discussions/1604
 
 ---
 
