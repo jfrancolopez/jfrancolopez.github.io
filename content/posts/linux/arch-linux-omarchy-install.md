@@ -1,5 +1,5 @@
 +++
-title= 'Omarchy Setup and Auto-login (manual installation)'
+title= 'Omarchy Setup Dual boot and Auto-login (manual installation)'
 date= '2025-10-20'
 description= 'Installing Arch Linux without LUKS for autologin, using Limine bootloader, Omarchy desktop, and preparing for VFIO passthrough and dual boot.'
 tags = ['arch', 'linux', 'limine', 'omarchy', 'vfio', 'dualboot']
@@ -81,22 +81,27 @@ sudo pacman -S base-devel git curl wget nano htop openssh pipewire pipewire-alsa
 ```
 
 
-### /boot/EFI/limine/limine.conf
+### /boot/limine.conf
 
 ```bash
 TIMEOUT=10
-DEFAULT_ENTRY=Archito
-/Arch Linux (linux)
-  protocol: linux
-  path: boot():/vmlinuz-linux
-  cmdline: root=PARTUUID=bb36f3f5-5339-49d1-bdfa-df27d6345e8e zswap.enabled=0 rootflags=subvol=@ rw rootfstype=btrfs
-  module_path: boot():/initramfs-linux.img
+DEFAULT_ENTRY=3
 
-/Arch Linux (linux-fallback)
-  protocol: linux
-  path: boot():/vmlinuz-linux
-  cmdline: root=PARTUUID=bb36f3f5-5339-49d1-bdfa-df27d6345e8e zswap. enabled=Ø rootflags=subvol=@ rw rootfstype=btrfs
-  module_path: boot():/initramfs-linux-fallback.img
+/Windows 11
+  protocol: efi
+  path: boot):/EFI/Microsoft/Boot/bootmgfw.efi
+  comment Boot into windows 11
+
+/+Archito
+  comment: Omarchy
+  comment: machine-id=xxxx order priority=50
+    //Linux
+    comment: 6.17.3-arch2-1
+    protocol: efi_chainload
+    image_path: boot():/EFI/Linx/omarchy_linux.efiXXXX
+
+    //Snapshots...
+
 
 
 
