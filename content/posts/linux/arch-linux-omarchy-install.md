@@ -31,9 +31,9 @@ sudo blkid
 
 | Partition | Mount Point | Type  | Size  | Use                |
 |-----------|-------------|-------|-------|---------------------|
-| /dev/nvme0n1p1 | /boot | vfat  | 512M  | EFI, Limine & kernels |
-| /dev/nvme0n1p2 | /     | ext4/btrfs | rest  | Root partition       |
-
+| /dev/nvme0n1p1 | /boot | fat32  | 2GiB  | EFI, Limine & kernels |
+| /dev/nvme0n1p2 | /     | btrfs | rest  | Root partition       |
+compress=zstd
 ---
 
 ## Mounting Partitions
@@ -43,6 +43,14 @@ mount /dev/nvme0n1p2 /mnt
 mkdir -p /mnt/boot
 mount /dev/nvme0n1p1 /mnt/boot
 ```
+------------------------------
+|name    |  mountpoint|
+|--------|------------|
+|@       |  /         |
+|@home   |  /home     |
+|@log    |  /var/log  |
+|@pkg    |  /var/cache/pacman/pkg|
+
 
 ---
 
@@ -59,45 +67,39 @@ archinstall
 - Hostname, root password, main user
 - Enable: NetworkManager, PipeWire
 - Disable: LUKS encryption
+- Bootloader: Limine
+- Optional Repositories: Multilib
 
 ---
 
-## Post-install: Limine Bootloader
+## Post-install
 
-Install Limine:
+Install additional software:
 
 ```bash
-sudo pacman -S limine
+sudo pacman -S base-devel git curl wget nano htop openssh pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber
 ```
 
-Format EFI partition as FAT32 if not already:
+
+### /boot/EFI/limine/limine.conf
 
 ```bash
-mkfs.fat -F32 /dev/nvme0n1p1
-```
+TIMEOUT=10
+DEFAULT_ENTRY=Archito
+/Arch Linux (linux)
+  protocol: linux
+  path: boot():/vmlinuz-linux
+  cmdline: root=PARTUUID=bb36f3f5-5339-49d1-bdfa-df27d6345e8e zswap.enabled=0 rootflags=subvol=@ rw rootfstype=btrfs
+  module_path: boot():/initramfs-linux.img
 
-### Generate Limine bootloader files:
+/Arch Linux (linux-fallback)
+  protocol: linux
+  path: boot():/vmlinuz-linux
+  cmdline: root=PARTUUID=bb36f3f5-5339-49d1-bdfa-df27d6345e8e zswap. enabled=Ø rootflags=subvol=@ rw rootfstype=btrfs
+  module_path: boot():/initramfs-linux-fallback.img
 
-```bash
-sudo limine-install /dev/nvme0n1
-```
 
-### Create `limine.cfg`
 
-```bash
-cat <<EOF | sudo tee /boot/limine.cfg
-TIMEOUT=5
-DEFAULT_ENTRY=ArchLinux
-
-:ArchLinux
-PROTOCOL=linux
-KERNEL_PATH=boot://vmlinuz-linux
-INITRD_PATH=boot://initramfs-linux.img
-CMDLINE=root=/dev/nvme0n1p2 rw quiet splash loglevel=3
-
-:Windows
-PROTOCOL=chainload
-CHAINLOAD_PATH=boot://EFI/Microsoft/Boot/bootmgfw.efi
 EOF
 ```
 
@@ -120,7 +122,7 @@ sudo cp -r /mnt/windows_efi/EFI/Microsoft /boot/EFI/
 
 ---
 
-## Enable TTY Autologin
+## Enable TTY Autologin ( also available on GUI w christitus tool)
 
 ```bash
 mkdir -p /etc/systemd/system/getty@tty1.service.d/
