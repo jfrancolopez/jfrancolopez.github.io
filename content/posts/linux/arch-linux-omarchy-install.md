@@ -110,8 +110,11 @@ EOF
 Mount your Windows EFI partition:
 
 ```bash
+##identify the right drive
+lsblk -o NAME,SIZE,FSTYPE,LABEL,MOUNTPOINT,UUID,MODEL,PARTUUID
+##create and mount
 mkdir -p /mnt/windows_efi
-mount /dev/nvme1n1p1 /mnt/windows_efi
+sudo mount /dev/nvme2n1p1 /mnt/windows_efi
 ```
 
 Copy contents:
