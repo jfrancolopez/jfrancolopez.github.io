@@ -44,7 +44,7 @@ So the solution is:
 
 Download from Symless archive:
 
-👉 https://help.symless.com/hc/en-us/articles/33745162318225-Installing-Synergy-1-on-macOS
+ https://help.symless.com/hc/en-us/articles/33745162318225-Installing-Synergy-1-on-macOS
 
 Install and configure:
 
@@ -299,6 +299,4 @@ You should see:
 ✔ **Synergy 1 + Waynergy = flawless cross-device workflow**
 
 ---
-
-If you want, I can generate a **PNG diagram**, a **short video-style animation**, or convert this post into a **Spanish version**.
 
