@@ -7,52 +7,49 @@ tags = ['arch', 'linux', 'wayland', 'synergy', 'waynergy', 'hyprland']
 
 ## Overview
 
-After **many hours of testing**, trying **Synergy 3**, its **flatpak**, **AUR versions**, **Deskflow**, and lots of broken attempts, I finally found a stable combination:
+After **many hours of testing**, trying:
 
-- **macOS → Synergy 1 Pro** (server)  
-- **Arch Linux (Hyprland Wayland) → Waynergy** (client)  
-- **Connection over port 24800**  
-- **Mac QWERTY keymap fix included**  
+- Synergy 3 on macOS and Linux  
+- Flatpak builds  
+- AUR variants  
+- Deskflow and other alternatives  
 
-This setup works **perfectly for mouse**, and after configuration, **keyboard mapping is now correct**.
+I finally landed on a combo that actually works well on Wayland with Hyprland:
+
+- **macOS (server)**: Synergy 1  
+- **Arch Linux (client)**: Waynergy  
+- **Desktop**: Omarchy / Hyprland  
+- **Backend**: `wlr`  
+- **Keyboard fix**: using Waynergy `raw-keymap` instead of xkb
+
+Mouse was perfect from the start. The hard part was the **keyboard**, especially the letters `A`, `E`, `R` and the **Command / Option** keys from the Mac mapping correctly on the Arch client.
+
+The final working solution uses:
+
+- Hyprland’s own keyboard map (`wl_keyboard_map = true`)  
+- Synergy key codes (`syn_raw_key_codes = true`)  
+- A custom **`[raw-keymap]`** section
+
+Huge thanks to **ghost** for this comment and mapping reference:  
+<https://github.com/r-c-f/waynergy/issues/84>
 
 ---
+
 <!--more-->
 
-## Why Synergy 1 instead of Synergy 3?
+## 1. Synergy 1 on macOS (server)
 
-`synergy3-bin` and the flatpak version on Linux failed because:
+Download and install Synergy 1 from the official Symless archive:
 
-- Wayland input APIs do **not support remote-desktop control**
-- Synergy 3 requires **xdg-desktop-portal RemoteDesktop**, which Hyprland does NOT implement
-- Errors like:
+> <https://help.symless.com/hc/en-us/articles/33745162318225-Installing-Synergy-1-on-macOS>
 
-```
-GDBus.Error:org.freedesktop.DBus.Error.InvalidArgs:
-No such interface “org.freedesktop.portal.RemoteDesktop”
-```
-
-So the solution is:
-
-> **Use Synergy 1 as server + Waynergy as the Wayland-compatible client.**
-
----
-
-## Installation Steps
-
-### 1. Install Synergy 1 on macOS (server)
-
-Download from Symless archive:
-
- https://help.symless.com/hc/en-us/articles/33745162318225-Installing-Synergy-1-on-macOS
-
-Install and configure:
+Basic server setup:
 
 - Set your Mac as **Server**
-- Name your Linux client e.g. `xps`
-- Place `xps` on the grid
-- Disable TLS (Waynergy does not support Synergy 1 TLS)
+- Add a client with the name: `xps`
+- Place `xps` at the correct position on the grid
 - Use **port 24800**
+- Enable SSL if you want, but remember that Waynergy handles TLS in its own way (more on that below)
 
 ---
 
@@ -62,15 +59,13 @@ Install and configure:
 yay -S waynergy
 ```
 
-Confirm dependencies:
+Useful dependencies:
 
 ```bash
-sudo pacman -S wl-clipboard libxkbcommon libinput libuinput
+sudo pacman -S wl-clipboard libxkbcommon libinput
 ```
 
----
-
-## 3. Create config directory
+Create the config directory:
 
 ```bash
 mkdir -p ~/.config/waynergy
@@ -78,119 +73,274 @@ mkdir -p ~/.config/waynergy
 
 ---
 
-## 4. Create `config.ini` (important for correct keyboard)
+## 3. Final working `config.ini` for Mac Synergy 1 → Waynergy (Hyprland)
 
-Save this at:
+Path:
 
 ```
 ~/.config/waynergy/config.ini
 ```
 
-### **Mac QWERTY → Wayland fix**
-
 ```ini
-[syn]
-raw_key_codes = false
+# ---------------------------------------------------------
+# Waynergy main configuration
+# ---------------------------------------------------------
+
+# Server hostname or IP (macOS running Synergy 1)
+host = Mac-2.local
+# host = 192.168.145.121   # Alternative: static IP
+
+# Synergy 1 default port
+port = 24800
+
+# This must match the screen name configured on Synergy 1 (macOS)
+name = xps
+
+# Wayland backend for Hyprland (important!)
+backend = wlr
+
+# Physical screen resolution (Waynergy uses this for pointer scaling)
+width = 3200
+height = 1800
+
+# Disable xkb keymaps and rely on raw key mappings instead (more reliable for macOS)
+# xkb_key_offset = 7
+wl_keyboard_map = true
+
+# Enable Synergy raw keycode interpretation (needed for Macs)
+syn_raw_key_codes = true
+
+# ---------------------------------------------------------
+# Screensaver / Idle Behavior
+# ---------------------------------------------------------
+
+[screensaver]
+# What to run when macOS tells the client to start screensaver
+start = pkill -SIGUSR1 #swayidle
+
+# What to run when macOS exits screensaver
+stop = pkill swaylock
+
+[idle-inhibit]
+# Prevent screen from sleeping by sending a dummy key event
+method = key
+keyname = HYPR
+
+# ---------------------------------------------------------
+# TLS Settings
+# ---------------------------------------------------------
+
+[tls]
+enable = true     # Enable encryption
+tofu = true       # Trust-On-First-Use (accept first certificate automatically)
+
+# ---------------------------------------------------------
+# Logging Settings
+# ---------------------------------------------------------
+
+[log]
+level = 4         # More verbose logging (0 = none, 6 = very noisy)
+mode = a          # Append to log file
+path = /tmp/waynergy.log
+
+# ---------------------------------------------------------
+# Raw Keymap (macOS → Arch Linux)
+# These remap raw keycodes received from Synergy 1
+# to local Linux Wayland keycodes. This is the magic that
+# fixes A, E, R, CMD, OPTION, etc.
+# ---------------------------------------------------------
 
 [raw-keymap]
-# Correct mapping for macOS server → Arch client
-# Generated with waynergy-mapper (edited)
-30 = 20
-31 = 26
-32 = 8
-33 = 21
-34 = 23
-35 = 28
-36 = 24
-37 = 12
-38 = 18
-39 = 19
-45 = 25
-46 = 29
+54 = 9
+19 = 10
+20 = 11
+21 = 12
+22 = 13
+24 = 14
+23 = 15
+27 = 16
+29 = 17
+26 = 18
+30 = 19
+28 = 20
+25 = 21
+52 = 22
+49 = 23
+13 = 24
+14 = 25
+15 = 26
+16 = 27
+18 = 28
+17 = 29
+33 = 30
+35 = 31
+36 = 33
+31 = 35
+37 = 36
+60 = 37
+1 = 38
+2 = 39
+3 = 40
+4 = 41
+6 = 42
+5 = 43
+39 = 44
+41 = 45
+38 = 46
+42 = 47
+40 = 48
+51 = 49
+43 = 51
+7 = 52
+8 = 53
+9 = 54
+10 = 55
+12 = 56
+46 = 57
+47 = 58
+44 = 59
+48 = 60
+45 = 61
+57 = 62
+
+# Function keys / arrows
+68 = 63
+56 = 133   # CMD key (Super)
+50 = 65
+58 = 66
+123 = 67
+121 = 68
+100 = 69
+119 = 70
+97 = 71
+98 = 72
+99 = 73
+101 = 74
+102 = 75
+110 = 76
+72 = 77
+
+# Numeric + arrow block
+90 = 79
+92 = 80
+93 = 81
+79 = 82
+87 = 83
+88 = 84
+89 = 85
+70 = 86
+84 = 87
+85 = 88
+86 = 89
+83 = 90
+69 = 91
+
+# More media/navigation keys
+104 = 95
+112 = 96
+77 = 104
+76 = 106
+116 = 110
+127 = 111
+117 = 112
+124 = 113
+125 = 114
+120 = 115
+126 = 116
+122 = 117
+118 = 119
+
+# Mac OPTION → Linux ALT
+59 = 64
 ```
 
-This fixes issues like:
+---
+You can tune mappings further by using:
 
-| Key pressed | Wrong output | Fixed |
-|------------|--------------|--------|
-| `q`        | `4`          | ✔ correct |
-| `w`        | `4`/`5`/`6`  | ✔ correct |
-| `u`        | `p`          | ✔ correct |
-| Backspace  | `z`          | ✔ correct |
+```bash
+waynergy-mapper -r
+```
+
+This lets you press each key on the Mac and see what Synergy sends, then map it into the proper Linux keycode.
 
 ---
 
-## 5. Start Waynergy manually (recommended for first test)
+## 4. Manual test: run Waynergy from terminal
+
+Once `config.ini` is in place, you can simply run:
 
 ```bash
-waynergy -b wlr -c 192.168.145.121 -p 24800 -N xps
+waynergy
 ```
 
-Breakdown:
+Because `host`, `port`, `name`, and `backend` are defined in the config file, `waynergy` will read them from there.
 
-| Argument | Meaning |
-|---------|---------|
-| `-b wlr` | Hyprland backend |
-| `-c IP` | Server (Mac) IP |
-| `-p 24800` | Synergy 1 default port |
-| `-N xps` | Client name (must match server config) |
+If you prefer to be explicit:
 
-Expected output:
-
+```bash
+waynergy -b wlr -c Mac-2.local -p 24800 -N xps
 ```
-Connected to synergy server
-Mouse + Keyboard active
+
+If everything is correct, you should see something like:
+
+```text
+[INFO] Compositor seems to be Hyprland
+[INFO] Using wlroots virtual input protocols
+[INFO] Using ext-idle-notify-v1 idle inhibition protocol
+[INFO] Going to connect to Mac-2.local at port 24800
+[INFO] Server is Synergy 1.8
+[INFO] Connected as client "xps"
+```
+
+At that point:
+
+- Mouse moves from macOS → Arch when you cross the edge  
+- Keyboard works including `A`, `E`, `R`, and modifier keys like `cmd`, `alt`, etc.
+
+---
+
+## 5. Run Waynergy in the background (and close the terminal)
+
+You don’t want to keep a terminal open forever just to keep `waynergy` alive.  
+Here are the best ways to run it in the background and **detach it from your terminal**.
+
+### Option A — One-off background run with `nohup`
+
+This is great when you just want to launch it manually and forget:
+
+```bash
+nohup waynergy &> ~/.local/share/waynergy.log &
+```
+
+- `nohup` keeps the process running even if you close the terminal.  
+- `&>` redirects stdout/stderr to the log file.  
+- `&` sends it to the background.
+
+You can safely close the terminal afterwards.
+
+To check if it is running:
+
+```bash
+pgrep -a waynergy
+```
+
+To stop it:
+
+```bash
+killall waynergy
 ```
 
 ---
 
-## 6. Verify Waynergy is loading your config
+### Option B — Systemd user service (recommended)
 
-Run:
+For a cleaner long-term setup, use a **user-level systemd service**.  
+This starts Waynergy automatically at login and restarts it if it ever crashes.
 
-```bash
-WAYNERGY_LOG=debug waynergy -b wlr -c 192.168.145.121 -p 24800 -N xps
-```
-
-You should see:
-
-```
-Loading config from ~/.config/waynergy/config.ini
-```
-
-If not, force it:
+Create the service file:
 
 ```bash
-waynergy -C ~/.config/waynergy/config.ini -b wlr -c 192.168.145.121 -p 24800 -N xps
-```
-
----
-
-# Autostart on Arch (Hyprland)
-
-## Option A — Hyprland Autostart
-
-Edit:
-
-```
-~/.config/hypr/hyprland.conf
-```
-
-Add:
-
-```bash
-exec-once = waynergy -b wlr -c 192.168.145.121 -p 24800 -N xps
-```
-
-## Option B — systemd user service
-
-### 1. Create service file
-
-```
 mkdir -p ~/.config/systemd/user
-```
-
-```
 nano ~/.config/systemd/user/waynergy.service
 ```
 
@@ -198,105 +348,105 @@ Paste:
 
 ```ini
 [Unit]
-Description=Waynergy Client Service
+Description=Waynergy Synergy Client (Hyprland)
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/waynergy -b wlr -c 192.168.145.121 -p 24800 -N xps
+ExecStart=/usr/bin/waynergy
 Restart=always
+RestartSec=2
+
+# Optional: environment for XDG + Wayland
+Environment=WAYLAND_DISPLAY=wayland-1
+Environment=XDG_RUNTIME_DIR=%t
 
 [Install]
 WantedBy=default.target
 ```
 
-### 2. Enable service
+Reload and enable:
 
 ```bash
+systemctl --user daemon-reload
 systemctl --user enable --now waynergy.service
 ```
 
+Check logs:
+
+```bash
+journalctl --user -u waynergy.service -f
+```
+
+Stop it:
+
+```bash
+systemctl --user stop waynergy.service
+```
+
+This way:
+
+- Waynergy runs completely in the background  
+- It is started automatically on login  
+- You can close all terminals and it will keep working  
+
 ---
 
-# Manual Start Script (optional)
+### Option C — Hyprland `exec-once` (session-level)
 
-Create:
+You can also start Waynergy from your Hyprland config:
 
+```bash
+nano ~/.config/hypr/hyprland.conf
 ```
-~/bin/waynergy-start
+
+Add:
+
+```ini
+exec-once = waynergy
+```
+
+This launches it once per Hyprland session.  
+You still manage it like any other process, but it starts automatically when your session starts.
+
+---
+
+## 6. Optional: small launcher script
+
+If you like having a simple alias-style launcher, you can wrap the `nohup` command:
+
+```bash
+mkdir -p ~/bin
+nano ~/bin/waynergy-start
 ```
 
 ```bash
 #!/usr/bin/env bash
-waynergy -b wlr -c 192.168.145.121 -p 24800 -N xps
+nohup waynergy &> ~/.local/share/waynergy.log &
 ```
 
-Make executable:
+Make it executable:
 
 ```bash
 chmod +x ~/bin/waynergy-start
 ```
 
-Run anytime:
+Then run:
 
 ```bash
 waynergy-start
 ```
 
----
-
-# Troubleshooting
-
-### **Keyboard still incorrect?**
-
-Regenerate mapping:
-
-```bash
-waynergy-mapper -r
-```
-
-Press each key once → it outputs raw codes → Waynergy generates a new mapping block.
-
-Copy the block to:
-
-```
-~/.config/waynergy/config.ini
-```
+and close the terminal.  
+This works nicely even without systemd if you prefer something simpler.
 
 ---
 
-### **Clipboard not working**
+## Final notes
 
-Install:
+- This setup is: **Synergy 1 macOS server → Waynergy client on Arch (Hyprland)**.  
+- No custom xkb keymap is required, only a raw-keymap block.  
+- `cmd` and `option` are mapped to **Super** and **Alt**, so shortcuts feel natural.  
+- Using a systemd user service makes it feel “native” and hands-off after the first configuration.
 
-```bash
-sudo pacman -S wl-clipboard
-```
-
----
-
-### **Connection refused**
-
-Check if Synergy 1 is listening:
-
-```bash
-lsof -nP -iTCP -sTCP:LISTEN | grep synergy
-```
-
-You should see:
-
-```
-*:24800 (LISTEN)
-```
-
----
-
-## Final Result
-
-✔ **Mouse works perfectly**  
-✔ **Keyboard fully fixed with custom keymap**  
-✔ **Stable connection**  
-✔ **Auto-start enabled**  
-✔ **Synergy 1 + Waynergy = flawless cross-device workflow**
-
----
-
+If future Hyprland / Wayland protocols make Synergy-style apps easier, I’ll probably revisit Synergy 3 or Deskflow.  
+But for now, this combo works reliably and feels smooth enough to forget it’s even there.
