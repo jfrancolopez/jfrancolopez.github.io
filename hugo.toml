@@ -1,6 +1,6 @@
-baseURL = "https://solosoyfranco.github.io/"
+baseURL = "https://francolopez.github.io/"
 languageCode = "en-US"
-title = "Just Franco"
+title = "Franco Lopez"
 theme = "mostafa-hugo-theme"
 defaultContentLanguage = "en"
 enableRobotsTXT = true
