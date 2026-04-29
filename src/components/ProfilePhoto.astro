@@ -1,0 +1,18 @@
+---
+import { site } from '../data/site';
+
+const {
+  imagePath = site.profileImage,
+  alt = 'Franco Lopez',
+} = Astro.props;
+---
+
+{
+  imagePath ? (
+    <img class="profile-photo" src={imagePath} alt={alt} />
+  ) : (
+    <div class="avatar-placeholder" role="img" aria-label="Profile photo placeholder for Franco Lopez">
+      <span>FL</span>
+    </div>
+  )
+}

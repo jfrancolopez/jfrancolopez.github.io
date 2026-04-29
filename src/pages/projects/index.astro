@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const projects = [
+  {
+    title: 'Start Blue',
+    href: '/projects/start-blue/',
+    label: 'Production platform',
+    summary: 'Kubernetes-based quote platform used by 350+ dealers across the US and Canada.',
+    stack: ['Kubernetes', 'React', 'PostgreSQL', 'Docker', 'Cloud hosting'],
+  },
+  {
+    title: 'LS Academy',
+    href: '/projects/ls-academy/',
+    label: 'Current build',
+    summary: 'Kubernetes-hosted learning platform for dealer training and enablement.',
+    stack: ['Kubernetes', 'Platform engineering', 'Training workflows', 'Operations'],
+  },
+  {
+    title: 'Warehouse Management System',
+    href: '/projects/warehouse-management-system/',
+    label: 'Software foundation',
+    summary: 'Custom logistics system with barcode, scanner, inventory, reporting, and customs workflows.',
+    stack: ['Business software', 'Databases', 'Scanner workflows', 'Reporting'],
+  },
+  {
+    title: 'Homelab / GitOps / Automation',
+    href: '/projects/homelab-gitops/',
+    label: 'Learning lab',
+    summary: 'Hands-on infrastructure lab for repeatable Kubernetes, Linux, automation, and deployment patterns.',
+    stack: ['GitOps', 'Talos', 'Proxmox', 'Raspberry Pi', 'Automation'],
+  },
+];
+---
+
+<BaseLayout title="Projects | Franco Lopez" description="Selected platform, infrastructure, automation, and software projects by Franco Lopez.">
+  <header class="page-header">
+    <span class="eyebrow">selected work</span>
+    <h1>Projects that show how I think about systems.</h1>
+    <p class="lead">
+      I’m not trying to show a random gallery of things I have touched. These projects explain the
+      bridge between software, infrastructure, operations, and reliability.
+    </p>
+  </header>
+
+  <section class="grid">
+    {projects.map((project) => (
+      <a class="card" href={project.href}>
+        <span class="meta-label">{project.label}</span>
+        <h3>{project.title}</h3>
+        <p>{project.summary}</p>
+        <div class="tags">
+          {project.stack.map((item) => <span class="tag">{item}</span>)}
+        </div>
+      </a>
+    ))}
+  </section>
+</BaseLayout>

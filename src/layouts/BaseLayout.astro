@@ -1,0 +1,63 @@
+---
+import '../styles/global.css';
+
+const {
+  title = 'Franco Lopez',
+  description = 'Platform / DevOps engineer focused on cloud infrastructure, Kubernetes, automation, and reliable internal systems.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url} />
+    <link rel="icon" href="/favicon.svg" />
+    <title>{title}</title>
+    <script is:inline>
+      const storedTheme = localStorage.getItem('theme');
+      document.documentElement.dataset.theme = storedTheme || 'dark';
+    </script>
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+        <nav class="nav" aria-label="Main navigation">
+          <a class="brand" href="/">
+            <strong>Franco Lopez</strong>
+            <span>Notes on systems, tools, and infrastructure</span>
+          </a>
+          <div class="nav-links">
+            <a href="/blog/">Writing</a>
+            <a href="/resume/">Resume</a>
+            <a href="/contact/">Contact</a>
+            <button class="theme-toggle" type="button" aria-label="Toggle dark mode" data-theme-toggle>◐</button>
+          </div>
+        </nav>
+      </header>
+      <main class="main">
+        <slot />
+      </main>
+      <footer class="site-footer">
+        <div class="footer-inner">
+          <span>Raleigh-Durham, NC</span>
+          <span>English / Spanish · Open to remote or hybrid roles</span>
+        </div>
+      </footer>
+    </div>
+    <script is:inline>
+      const toggle = document.querySelector('[data-theme-toggle]');
+      toggle?.addEventListener('click', () => {
+        const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+        document.documentElement.dataset.theme = next;
+        localStorage.setItem('theme', next);
+        toggle.setAttribute('aria-label', `Switch to ${next === 'dark' ? 'light' : 'dark'} mode`);
+      });
+    </script>
+  </body>
+</html>

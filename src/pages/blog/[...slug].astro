@@ -1,0 +1,38 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = (await getCollection('blog')).filter((post) => !post.data.draft);
+
+  return posts.map((post) => ({
+    params: {
+      slug: post.filePath?.endsWith('.es.md')
+        ? `es/${post.filePath.replace(/^src\/content\/blog\//, '').replace(/\.es\.md$/, '')}`
+        : post.filePath?.replace(/^src\/content\/blog\//, '').replace(/\.md$/, '') || post.id.replace(/\.md$/, ''),
+    },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<BaseLayout title={`${post.data.title} | Franco Lopez`} description={post.data.description || 'Technical writing by Franco Lopez.'}>
+  <article class="article content">
+    <header class="page-header">
+      <span class="eyebrow">{post.data.date.toLocaleDateString()}</span>
+      <h1>{post.data.title}</h1>
+      {post.data.description && <p class="lead">{post.data.description}</p>}
+      {post.data.tags && post.data.tags.length > 0 && (
+        <div class="tags article-tags" aria-label="Tags">
+          {post.data.tags.map((tag) => (
+            <a class="tag" href={`/blog/?tag=${encodeURIComponent(tag)}`}>{tag}</a>
+          ))}
+        </div>
+      )}
+    </header>
+    <Content />
+  </article>
+</BaseLayout>

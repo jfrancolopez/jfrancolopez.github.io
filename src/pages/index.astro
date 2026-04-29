@@ -1,17 +1,34 @@
 ---
-
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProfilePhoto from '../components/ProfilePhoto.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="Franco Lopez | Personal Technology Notebook" description="A quiet personal notebook on software, systems, infrastructure, tools, and working through technology.">
+  <section class="cover-page" aria-labelledby="cover-title">
+    <div class="cover-card">
+      <ProfilePhoto />
+
+      <div class="cover-kicker" aria-hidden="true">
+        <span>~/notes</span>
+        <span class="cursor"></span>
+      </div>
+
+      <h1 id="cover-title">Franco Lopez</h1>
+
+      <p class="cover-intro">
+        A quiet place where I write through software, systems, infrastructure,
+        and the tools I use to understand them.
+      </p>
+
+      <p class="cover-subtitle">
+        Part notebook, part blog, part archive.
+      </p>
+
+      <nav class="cover-links" aria-label="Homepage links">
+        <a href="/blog/">Writing</a>
+        <a href="/resume/">About / Resume</a>
+        <a href="/contact/">Contact</a>
+      </nav>
+    </div>
+  </section>
+</BaseLayout>

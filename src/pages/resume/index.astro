@@ -1,0 +1,66 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProfilePhoto from '../../components/ProfilePhoto.astro';
+import { resume } from '../../data/resume.js';
+---
+
+<BaseLayout title={`Resume | ${resume.name}`} description={`Resume for ${resume.name}, platform and DevOps-focused engineer based in Raleigh-Durham, NC.`}>
+  <header class="page-header resume-header">
+    <span class="eyebrow">resume</span>
+    <h1>{resume.headline}</h1>
+  </header>
+
+  <section class="resume-intro" aria-label="Resume introduction">
+    <div class="resume-intro-copy">
+      <p class="lead">{resume.intro}</p>
+      <div class="actions">
+        <a class="button primary" href="/FrancoLopez-Resume.pdf">Download PDF</a>
+        <a class="button" href={`mailto:${resume.contact.email}`}>Email me</a>
+      </div>
+    </div>
+    <ProfilePhoto />
+  </section>
+
+  <article class="content">
+    <h2>Summary</h2>
+    <p>{resume.summary}</p>
+
+    <h2>Technical Focus</h2>
+    <ul>
+      {resume.skills.map((skill) => (
+        <li><strong>{skill.label}:</strong> {skill.items.join(', ')}</li>
+      ))}
+    </ul>
+
+    <h2>Selected Work</h2>
+    <ul>
+      {resume.selectedWork.map((item) => <li>{item}</li>)}
+    </ul>
+
+    <h2>Experience</h2>
+    {resume.experience.map((job) => (
+      <>
+        <h3>{job.company} · {job.role}</h3>
+        <p>{job.location} · {job.dates}</p>
+        <ul>
+          {job.bullets.map((bullet) => <li>{bullet}</li>)}
+        </ul>
+      </>
+    ))}
+
+    <h2>Projects</h2>
+    <ul>
+      {resume.projects.map((project) => (
+        <li><strong>{project.name}:</strong> {project.description}</li>
+      ))}
+    </ul>
+
+    <h2>Education and Certifications</h2>
+    <ul>
+      {resume.educationAndCertifications.map((item) => <li>{item}</li>)}
+    </ul>
+
+    <h2>Languages</h2>
+    <p>{resume.languages.join(' and ')}.</p>
+  </article>
+</BaseLayout>

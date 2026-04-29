@@ -1,0 +1,197 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const posts = (await getCollection('blog'))
+  .filter(post => !post.data.draft && !post.filePath?.endsWith('.es.md'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const tags = [...new Set(posts.flatMap((post) => post.data.tags || []))]
+  .sort((a, b) => a.localeCompare(b));
+
+const postSlug = (post) =>
+  post.filePath
+    ?.replace(/^src\/content\/blog\//, '')
+    .replace(/\.md$/, '') || post.id.replace(/\.md$/, '');
+
+const postGroup = (post) => {
+  const relativePath = post.filePath?.replace(/^src\/content\/blog\//, '') || post.id;
+  const parts = relativePath.split('/');
+  return parts.length > 1 ? parts[0] : 'general';
+};
+
+const groupLabel = (group) =>
+  group === 'general'
+    ? 'General'
+    : group
+        .split('-')
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+
+const groups = [...new Set(posts.map(postGroup))]
+  .sort((a, b) => groupLabel(a).localeCompare(groupLabel(b)))
+  .map((group) => ({
+    key: group,
+    label: groupLabel(group),
+    posts: posts.filter((post) => postGroup(post) === group),
+  }));
+---
+
+<BaseLayout title="Writing | Franco Lopez" description="Technical notes and writing from Franco Lopez on infrastructure, Kubernetes, Linux, networking, automation, and practical systems work.">
+  <header class="page-header">
+    <span class="eyebrow">writing and notes</span>
+    <h1>Practical notes from the systems work.</h1>
+    <p class="lead">
+      This section should become proof of how I think: short, useful posts about infrastructure,
+      Kubernetes, Linux, networking, automation, mistakes, fixes, and tradeoffs.
+    </p>
+  </header>
+
+  <section class="notes-tools" aria-label="Search and filter notes">
+    <label class="search-label" for="notes-search">Search notes</label>
+    <input
+      id="notes-search"
+      class="notes-search"
+      type="search"
+      placeholder="Search titles, descriptions, tags..."
+      autocomplete="off"
+      data-notes-search
+    />
+
+    <div class="group-filter" aria-label="Filter notes by folder">
+      <button type="button" class="group-filter-button active" data-group-filter="all">All</button>
+      {groups.map((group) => (
+        <button type="button" class="group-filter-button" data-group-filter={group.key}>{group.label}</button>
+      ))}
+    </div>
+
+    {tags.length > 0 && (
+      <details class="tag-filter-details">
+        <summary>Filter by tag</summary>
+        <div class="tag-filter" aria-label="Filter notes by tag">
+          <button type="button" class="tag-filter-button active" data-tag-filter="all">All</button>
+          {tags.map((tag) => (
+            <button type="button" class="tag-filter-button" data-tag-filter={tag}>{tag}</button>
+          ))}
+        </div>
+      </details>
+    )}
+  </section>
+
+  <div class="grouped-post-list" data-post-list>
+    {groups.map((group) => (
+      <section class="note-group" data-note-group={group.key} aria-labelledby={`group-${group.key}`}>
+        <h2 id={`group-${group.key}`}>{group.label}</h2>
+        <div class="post-list">
+          {group.posts.map(post => (
+            <a
+              class="post-card"
+              href={`/blog/${postSlug(post)}/`}
+              data-post-card
+              data-group={group.key}
+              data-tags={(post.data.tags || []).map((tag) => tag.toLowerCase()).join('|')}
+              data-search={[post.data.title, post.data.description, ...(post.data.tags || [])].filter(Boolean).join(' ').toLowerCase()}
+            >
+              <span>{post.data.date.toLocaleDateString()}</span>
+              <h3>{post.data.title}</h3>
+              {post.data.description && <p>{post.data.description}</p>}
+              {post.data.tags && post.data.tags.length > 0 && (
+                <div class="tags" aria-label="Tags">
+                  {post.data.tags.map((tag) => <span class="tag">{tag}</span>)}
+                </div>
+              )}
+            </a>
+          ))}
+        </div>
+      </section>
+    ))}
+  </div>
+
+  <p class="empty-state" data-empty-state hidden>No notes match that search.</p>
+
+  <script>
+    const searchInput = document.querySelector('[data-notes-search]');
+    const cards = Array.from(document.querySelectorAll('[data-post-card]'));
+    const groups = Array.from(document.querySelectorAll('[data-note-group]'));
+    const groupButtons = Array.from(document.querySelectorAll('[data-group-filter]'));
+    const tagButtons = Array.from(document.querySelectorAll('[data-tag-filter]'));
+    const emptyState = document.querySelector('[data-empty-state]');
+    let activeTag = new URLSearchParams(window.location.search).get('tag') || 'all';
+    let activeGroup = new URLSearchParams(window.location.search).get('group') || 'all';
+
+    const normalize = (value) => value.toLowerCase().trim();
+
+    function setActiveButton() {
+      groupButtons.forEach((button) => {
+        const isActive = normalize(button.dataset.groupFilter || '') === normalize(activeGroup);
+        button.classList.toggle('active', isActive);
+        button.setAttribute('aria-pressed', String(isActive));
+      });
+
+      tagButtons.forEach((button) => {
+        const isActive = normalize(button.dataset.tagFilter || '') === normalize(activeTag);
+        button.classList.toggle('active', isActive);
+        button.setAttribute('aria-pressed', String(isActive));
+      });
+    }
+
+    function filterNotes() {
+      const query = normalize(searchInput?.value || '');
+      let visibleCount = 0;
+
+      cards.forEach((card) => {
+        const matchesSearch = !query || card.dataset.search?.includes(query);
+        const tags = (card.dataset.tags || '').split('|');
+        const matchesTag = activeTag === 'all' || tags.includes(normalize(activeTag));
+        const matchesGroup = activeGroup === 'all' || normalize(card.dataset.group || '') === normalize(activeGroup);
+        const visible = Boolean(matchesSearch && matchesTag && matchesGroup);
+
+        card.hidden = !visible;
+        if (visible) visibleCount += 1;
+      });
+
+      groups.forEach((group) => {
+        const visibleCards = group.querySelectorAll('[data-post-card]:not([hidden])');
+        group.hidden = visibleCards.length === 0;
+      });
+
+      if (emptyState) emptyState.hidden = visibleCount > 0;
+    }
+
+    groupButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        activeGroup = button.dataset.groupFilter || 'all';
+        const url = new URL(window.location.href);
+        if (activeGroup === 'all') {
+          url.searchParams.delete('group');
+        } else {
+          url.searchParams.set('group', activeGroup);
+        }
+        window.history.replaceState({}, '', url);
+        setActiveButton();
+        filterNotes();
+      });
+    });
+
+    tagButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        activeTag = button.dataset.tagFilter || 'all';
+        const url = new URL(window.location.href);
+        if (activeTag === 'all') {
+          url.searchParams.delete('tag');
+        } else {
+          url.searchParams.set('tag', activeTag);
+        }
+        window.history.replaceState({}, '', url);
+        setActiveButton();
+        filterNotes();
+      });
+    });
+
+    searchInput?.addEventListener('input', filterNotes);
+    const tagDetails = document.querySelector('.tag-filter-details');
+    if (activeTag !== 'all' && tagDetails) tagDetails.setAttribute('open', '');
+    setActiveButton();
+    filterNotes();
+  </script>
+</BaseLayout>
