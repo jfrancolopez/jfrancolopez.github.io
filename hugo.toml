@@ -21,15 +21,14 @@ enableRobotsTXT = true
   weight = 10
 
 [[menus.main]]
+  name = "Projects"
+  pageRef = "/projects"
+  weight = 15
+
+[[menus.main]]
   name = "Blog"
   pageRef = "/blog"
   weight = 20
-
-[[menus.main]]
-  name = "Cheatsheets"
-  url = "/tags/cheatsheet/"
-  weight = 25
-
 
 [[menus.main]]
   name = "Resume"
@@ -40,9 +39,9 @@ enableRobotsTXT = true
 
 [params]
   author = "Franco Lopez"
-  description = "IT Manager, Full-Stack Developer, 3D Printing & VR Enthusiast"
-  keywords = "IT, Django, React, DevOps, Homelab, Kubernetes, VR, 3D Printing, Cybersecurity"
-  subtitle = "Modern tech. Old-school curiosity."
+  description = "Platform & Infrastructure Engineer — Kubernetes, Azure, CI/CD, Linux"
+  keywords = "Platform Engineer, DevOps, SRE, Kubernetes, Azure, Docker, CI/CD, Linux, Infrastructure, Cloud, GitOps"
+  subtitle = "Platform engineer. Systems thinker. 15 years building things that stay up."
   showSubtitle = true
   paginate = 10
   resizeImages = true
@@ -65,13 +64,7 @@ enableRobotsTXT = true
   socialMediaLinks = [
     { name = "GitHub", link = "https://github.com/solosoyfranco", icon = "fab fa-github" },
     { name = "LinkedIn", link = "https://linkedin.com/in/jfranco-lopez", icon = "fab fa-linkedin" },
-    { name = "Email", link = "mailto:jfrancolopez.dev@gmail.com", icon = "fas fa-envelope" },
-    { name = "3D Projects", link = "https://www.printables.com/@Franco_443073", icon = "fas fa-cube" }
-  ]
-
-  otherLinks = [
-    { name = "StartBlue Quote Tool", link = "https://startblue.lstractorusa.com" },
-    { name = "Youtube", link = "https://www.youtube.com/@MusicaPepefranco" }
+    { name = "Email", link = "mailto:jfrancolopez.dev@gmail.com", icon = "fas fa-envelope" }
   ]
 
   showFooter = true
@@ -84,7 +77,7 @@ enableRobotsTXT = true
     languageCode = "en-US"
     languageName = "English"
     [Languages.en.params]
-      subtitle = "Modern tech. Old-school curiosity."
+      subtitle = "Platform engineer. Systems thinker. 15 years building things that stay up."
 
   [Languages.es]
     weight = 2
