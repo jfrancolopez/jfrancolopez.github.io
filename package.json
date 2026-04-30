@@ -10,6 +10,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "resume:pdf": "node tools/generate-resume-pdf.mjs",
+    "resume:js": "node tools/generate-resume-pdf.mjs",
     "astro": "astro"
   },
   "dependencies": {

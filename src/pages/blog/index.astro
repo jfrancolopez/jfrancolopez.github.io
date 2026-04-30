@@ -34,13 +34,14 @@ const groups = [...new Set(posts.map(postGroup))]
     key: group,
     label: groupLabel(group),
     posts: posts.filter((post) => postGroup(post) === group),
-  }));
+    }));
+
 ---
 
 <BaseLayout title="Writing | Franco Lopez" description="Technical notes and writing from Franco Lopez on infrastructure, Kubernetes, Linux, networking, automation, and practical systems work.">
   <header class="page-header">
     <span class="eyebrow">writing and notes</span>
-    <h1>Practical notes from the systems work.</h1>
+    <h1>Notes from the systems work.</h1>
     <p class="lead">
       This section should become proof of how I think: short, useful posts about infrastructure,
       Kubernetes, Linux, networking, automation, mistakes, fixes, and tradeoffs.
@@ -76,8 +77,24 @@ const groups = [...new Set(posts.map(postGroup))]
         </div>
       </details>
     )}
-  </section>
-
+  
+    <div class="all-post-list post-list" data-all-post-list>
+  {posts.map(post => (
+    <a
+      class="post-card"
+      href={`/blog/${postSlug(post)}/`}
+      data-post-card
+      data-grouped-card
+      data-group={postGroup(post)}
+      data-tags={(post.data.tags || []).map((tag) => tag.toLowerCase()).join('|')}
+      data-search={[post.data.title, post.data.description, ...(post.data.tags || [])].filter(Boolean).join(' ').toLowerCase()}
+    >
+      <span>{post.data.date.toLocaleDateString()}</span>
+      <h3>{post.data.title}</h3>
+      {post.data.description && <p>{post.data.description}</p>}
+    </a>
+  ))}
+</div>
   <div class="grouped-post-list" data-post-list>
     {groups.map((group) => (
       <section class="note-group" data-note-group={group.key} aria-labelledby={`group-${group.key}`}>
@@ -112,10 +129,14 @@ const groups = [...new Set(posts.map(postGroup))]
   <script>
     const searchInput = document.querySelector('[data-notes-search]');
     const cards = Array.from(document.querySelectorAll('[data-post-card]'));
+    const allPostList = document.querySelector('[data-all-post-list]');
+    const groupedCards = Array.from(document.querySelectorAll('[data-grouped-card]'));
     const groups = Array.from(document.querySelectorAll('[data-note-group]'));
+    const groupedPostList = document.querySelector('[data-post-list]');
     const groupButtons = Array.from(document.querySelectorAll('[data-group-filter]'));
     const tagButtons = Array.from(document.querySelectorAll('[data-tag-filter]'));
     const emptyState = document.querySelector('[data-empty-state]');
+    
     let activeTag = new URLSearchParams(window.location.search).get('tag') || 'all';
     let activeGroup = new URLSearchParams(window.location.search).get('group') || 'all';
 
@@ -137,6 +158,10 @@ const groups = [...new Set(posts.map(postGroup))]
 
     function filterNotes() {
       const query = normalize(searchInput?.value || '');
+      
+       const useFlatList = activeGroup === 'all';
+      if (allPostList) allPostList.hidden = !useFlatList;
+      if (groupedPostList) groupedPostList.hidden = useFlatList;
       let visibleCount = 0;
 
       cards.forEach((card) => {
@@ -151,7 +176,7 @@ const groups = [...new Set(posts.map(postGroup))]
       });
 
       groups.forEach((group) => {
-        const visibleCards = group.querySelectorAll('[data-post-card]:not([hidden])');
+        const visibleCards = group.querySelectorAll('[data-grouped-card]:not([hidden])');
         group.hidden = visibleCards.length === 0;
       });
 
