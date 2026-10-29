@@ -1,231 +1,165 @@
-// Set includeInPdf: false on any item to exclude it from the PDF.
-// Items default to included if the flag is omitted.
-// Set sections.<name> to false to skip an entire section in the PDF.
+// Single source of truth for the general resume.
+// The web page (src/pages/resume/index.astro) and the downloadable PDF
+// (npm run resume:pdf → public/FrancoLopez-Resume.pdf) both render from this file,
+// so the site and the PDF always say the same thing.
+//
+// Wording follows the October 2026 resume package (IT Infrastructure & Operations,
+// DevOps & Platform, Solutions Engineer, SRE), merged into one general version.
+//
+// Set includeInPdf: false on a project or bullet to keep it on the website only.
+// Set pdfSections.<name> to false to leave a whole section out of the PDF.
 
 export const resume = {
   name: 'Franco Lopez',
-  headline: 'Platform & DevOps Engineer · Kubernetes · GitOps · Cloud Infrastructure',
-  pdfHeadline: 'Platform & DevOps Engineer',  // shorter, used only in PDF
-  location: 'Raleigh-Durham, NC',
-  availability: 'Open to remote and hybrid Platform, DevOps, SRE, and Cloud Infrastructure roles',
-  languages: ['English', 'Spanish'],
+  headline: 'Platform & DevOps Engineer | IT Infrastructure & Operations Leader',
+  tagline:
+    'Kubernetes · CI/CD · Azure · Networking · Manufacturing & Plant IT · Solutions Engineering · Bilingual EN/ES',
+  location: 'Raleigh–Durham, NC',
+  availability:
+    'Open to Platform, DevOps, SRE, Solutions Engineering, and IT Infrastructure & Operations roles · remote or hybrid',
+  languages: 'English and Spanish, fully bilingual',
   contact: {
     email: 'hello@jfrancolopez.com',
     linkedin: 'linkedin.com/in/jfranco-lopez',
     github: 'github.com/jfrancolopez',
-    blog: 'jfrancolopez.com',
+    website: 'jfrancolopez.com',
   },
 
-  // PDF section toggles — set to false to omit a whole section from the PDF.
   pdfSections: {
-    summary: true,
-    skills: true,
-    experience: true,
-    projects: true,
-    educationAndCertifications: true,
-    currentlyLearning: false,
-    languages: false,
-    companyContext: false,
-    stackLines: false,
+    projects: false, // projects are covered in the experience bullets; website only
+    currentlyLearning: true,
+    languages: false, // already in the tagline and summary; the website shows it
   },
 
-  // Long version — used on the website.
   summary:
-        'Platform and DevOps engineer with 15+ years of experience in software engineering, cloud infrastructure, and production systems. I design and operate Kubernetes-hosted platforms, modernize cloud and identity infrastructure, and build automation and internal platforms that real users depend on. My current production work runs on a 3-node Kubernetes cluster serving more than 350 dealers across North America. I started my career as a software engineer, spent the last decade building and leading the systems behind manufacturing and business operations, and now focus on hands-on platform engineering, Kubernetes, and DevOps. Currently pursuing the Certified Kubernetes Administrator (CKA).',
-
-  // Short version — used only in the PDF. Falls back to summary if omitted.
-  pdfSummary:
-      'Platform and DevOps engineer with over 15 years of experience in software engineering, cloud infrastructure, and production systems. I design and operate Kubernetes platforms, modernize cloud and identity infrastructure, and build automation and internal platforms used by hundreds of users across North America. Bilingual in English and Spanish.',
+    "Platform engineer and IT leader with 15+ years across software development, infrastructure, and 24/7 production operations. As Head of IT for LS Tractor's U.S. and Canada division, designed, built, and operate the company's official tractor quoting platform on Kubernetes, in production for over two years without a major incident. Built IT for three new manufacturing plants, including an $80M automated facility, and cut production-line recovery time from over 60 minutes to under 10. Bilingual in English and Spanish, pursuing the CKA, and recipient of the 2025 CEO Award for Employee of the Year.",
 
   skills: [
-    {
-      label: 'Platform Engineering',
-      items: ['Linux','Kubernetes','Docker','Talos Linux','VMware','Hyper-V','Networking','Fortinet','Cisco'],
-    },
-    {
-      label: 'Cloud & Identity',
-      items: ['Microsoft Azure', 'GCP', 'Linode', 'Cloudflare', 'Azure IaaS', 'Azure AD / Entra ID', 'MFA', 'Conditional Access'],
-    },
-    {
-      label: 'DevOps & Automation',
-      items: ['GitOps', 'Flux CD', 'GitHub Actions', 'CI/CD', 'Helm', 'Bash', 'Python', 'Automation'],
-    },
-    {
-      label: 'Development',
-      items: ['PostgreSQL', 'REST APIs', 'SQL', 'React', 'Claris Filemaker', 'PHP', 'Microsoft 365'],
-    },
+    { label: 'Containers', items: ['Kubernetes (Linode LKE, Talos Linux)', 'Docker', 'Helm', 'Traefik', 'cert-manager'] },
+    { label: 'CI/CD & GitOps', items: ['GitHub Actions', 'Flux CD', 'Argo CD', 'Ansible', 'SOPS secrets management', 'infrastructure as code (Helm, Kubernetes manifests)'] },
+    { label: 'Cloud & identity', items: ['Microsoft Azure (IaaS, Entra ID, Conditional Access, MFA)', 'Active Directory', 'Microsoft 365', 'Google Cloud', 'Linode/Akamai', 'Cloudflare'] },
+    { label: 'Infrastructure & OT', items: ['Linux', 'Windows Server', 'VMware vSphere', 'HPE SimpliVity', 'Hyper-V', 'Proxmox', 'IT/OT integration', 'production-line systems', 'video surveillance'] },
+    { label: 'Network & security', items: ['Fortinet firewalls', 'Cisco', 'Cisco Meraki', 'site-to-site VPN', 'WireGuard', 'IDS', 'VLAN segmentation', 'Cloudflare DNS/WAF', 'TCP/IP', 'DNS', 'TLS'] },
+    { label: 'Reliability (SRE)', items: ['Backup and disaster recovery (restic)', 'failover testing', 'DR drills', 'incident response', 'on-call', '24/7 production support'] },
+    { label: 'Programming & automation', items: ['Python', 'Django', 'Bash', 'PowerShell', 'JavaScript', 'React', 'SQL', 'PostgreSQL', 'PHP', 'REST APIs', 'Power Automate', 'local LLMs', 'Claude Code'] },
+    { label: 'Delivery & leadership', items: ['Solution design', 'technical presentations', 'Freshservice ITSM', 'SLA design', 'vendor management', 'IT roadmaps', 'team leadership'] },
   ],
 
   experience: [
-  {
-    company: 'LS Tractor USA',
-    companyContext:
-      'North American operations of LS Mtron — a global tractor manufacturer (LS Group, Korea) sold in the US under both LS and New Holland Agriculture Tractors.',
-    role: 'IT Manager — Platform Engineering',
-    location: 'Raleigh, NC',
-    dates: 'Oct 2022 – Present',
-    bullets: [
-      {
-          text: 'Lead platform engineering initiatives supporting manufacturing systems, dealer platforms, cloud infrastructure, networking, identity, and cybersecurity across North American operations.',
-      },
-      {
-          text: 'Design and operate production Kubernetes platforms supporting internal and dealer-facing applications, including CI/CD workflows, containerized deployments, backup strategies, and disaster recovery.',
-      },
-      {
-        text: 'Modernized enterprise identity by migrating 200+ users from on-prem Active Directory to Microsoft Entra ID with Azure AD Connect, MFA, Conditional Access, and OneDrive adoption.',
-      },
-      {
-        text: 'Designed and deployed complete infrastructure for new manufacturing facilities in Texas and North Carolina, including networking, compute, security, identity, and secure remote access.',
-      },
-      {
-          text: 'Build internal platforms and automation that streamline dealer operations, employee training, and corporate workflows.',
-      },
-      {
-        text: 'Build and mentor a cross-functional engineering team across infrastructure, applications, and security.',
-        includeInPdf: false,
-      },
-    ],
-    stack: [
-      'Kubernetes',
-      'Linode',
-      'Azure',
-      'Docker',
-      'GCP',
-      'GitHub Actions',
-      'React',
-      'PostgreSQL',
-      'Fortinet',
-      'Cloudflare',
-    ],
-  },
-
+    {
+      company: 'LS Tractor USA',
+      companyContext:
+        'North American division of LS Mtron (LS Group, South Korea), with 6 U.S. sites, 200+ employees, and 350+ dealerships across the U.S. and Canada.',
+      role: 'IT Manager',
+      scope: 'Head of IT, U.S. & Canada',
+      location: 'Raleigh, NC',
+      dates: 'Oct 2022 – Present',
+      bullets: [
+        "Designed, built, and operate Start Blue, LS Tractor's official tractor quoting platform for the U.S. and Canada. Anyone can configure a tractor and get a quote in a few clicks, and 350+ dealerships use secure accounts to save quotes and apply their own pricing; 3,000+ quotes generated.",
+        'Run the platform on a three-node Kubernetes cluster (React, Django, PostgreSQL) delivered through GitOps: GitHub Actions builds images, Flux CD reconciles the cluster from Git, SOPS encrypts secrets, and Traefik and cert-manager handle ingress and automated TLS. In production for over two years without a major incident.',
+        'Presented Start Blue at LS Mtron headquarters in South Korea, including to the Global CEO; now adapting it with engineering teams there for multiple languages and global markets.',
+        'Designed backup and disaster recovery for production platforms and company data, with automated restic backups of application data and cluster configuration and tested recovery procedures.',
+        'Led IT for two new manufacturing facilities in 2025, in Palestine, TX and Battleboro, NC, from planning through go-live, delivering networking, site-to-site VPN, compute, security, and identity without disrupting existing sites.',
+        'Led the migration of 200+ users from on-premises Active Directory to Microsoft Entra ID, implementing Azure AD Connect, MFA, and Conditional Access, modernizing Group Policy, and moving file shares to OneDrive.',
+        'Manage networking and security across all sites (Fortinet firewalls, site-to-site VPN, secure remote access), and deployed 130+ security cameras with a 200 TB storage server designed for 6-month retention.',
+        'Developed and support LS Academy, a Moodle learning management system (LMS) on Kubernetes for 500+ dealers, employees, and U.S. LS Group affiliates, deployed through Argo CD and GitHub Actions.',
+        'Automated business processes with Microsoft 365, Power Apps, and Power Automate, including an internal ticketing system, and built an AI-assisted file organization tool that uses local language models to classify a shared, multi-department file server and flag duplicates, with human review before any change.',
+        'Lead a team of 4 IT professionals, serve as the escalation point for production incidents, and present IT roadmaps, project status, and risks to division leadership. Received the 2025 CEO Award for Employee of the Year.',
+      ],
+      stack: ['Kubernetes', 'Flux CD', 'Argo CD', 'GitHub Actions', 'SOPS', 'Traefik', 'React', 'Django', 'PostgreSQL', 'Linode/Akamai', 'Azure / Entra ID', 'Fortinet', 'Microsoft 365', 'Power Platform'],
+    },
     {
       company: 'Interamerican Foods Corp. / La Moderna USA',
-      companyContext: 'US arm of Grupo La Moderna — the leading pasta brand in Mexico and one of the largest pasta manufacturers in Latin America. Flagship US plant produces private-label pasta for Walmart (Great Value), Campbell\'s, and Goya.',
-      role: 'IT Manager — Cloud Infrastructure',
+      companyContext:
+        "U.S. subsidiary of Grupo La Moderna, one of Latin America's largest pasta manufacturers. Its first U.S. plant produces private-label pasta for Walmart (Great Value), Campbell's, and Goya.",
+      role: 'IT Manager',
       location: 'Cleburne, TX',
       dates: 'Jun 2017 – Oct 2022',
       bullets: [
-        { text: 'Stood up the entire IT and infrastructure stack for a 24/7 automated manufacturing facility from greenfield — networking, compute, storage, identity, and OT/IT integration.' },
-        { text: 'Designed and deployed the company\'s US web platform (lamodernausa.com) on Azure IaaS, including DNS, TLS, and supporting infrastructure.' },
-        { text: 'Built and implemented a multi-tier cloud backup and disaster recovery system to protect multiple 24/7 production and packaging line servers, with automated validation and failover testing, reducing recovery time from over 1 hour to under 10 minutes.' },
-        { text: 'Hardened the perimeter with next-gen firewalls, Cloudflare DNS/WAF, WireGuard VPN, and network segmentation across distributed sites.' },
-        { text: 'Led Cisco Meraki rollout (networking, wireless, security cameras) across all US locations with zero production downtime.' },
-        { text: 'Rolled out FreshService ITSM across 27 sites in the US, Mexico, and Guatemala — 2,500+ users, with SLA tracking and automated workflows.', includeInPdf: false },
+        'Owned all technology for a new $80M automated manufacturing plant, from greenfield buildout through 24/7 production, covering network and wireless, cybersecurity, video surveillance, servers and storage (VMware on HPE SimpliVity), identity, and OT/IT integration for production and packaging lines.',
+        'Led a team of 3 IT staff with on-call coverage for 24/7 production, and presented technology plans and launch readiness to executive and plant leadership.',
+        'Automated multi-tier backup and disaster recovery for production and packaging-line servers, with failover testing and regular DR drills, reducing recovery time from over 60 minutes to under 10.',
+        'Led the selection and implementation of Freshservice ITSM for 27 sites and 2,500+ users across the U.S., Mexico, and Guatemala, configuring SLAs, policies, automated workflows, and reporting.',
+        'Rolled out Cisco Meraki switching, wireless, and cameras across all U.S. sites with zero production downtime.',
+        'Secured all sites with site-to-site VPN, next-generation firewalls, intrusion detection (IDS), Cloudflare DNS and WAF, WireGuard remote access, and network segmentation; delivered regular security awareness training.',
+        "Built a cloud-hosted web platform for freight scheduling, document management, and logistics coordination; ran the company's official U.S. website on Azure IaaS; and migrated 100+ users to Microsoft 365.",
       ],
-      stack: ['Azure', 'VMware', 'HPE SimpliVity', 'Cisco Meraki', 'Fortinet', 'Cloudflare', 'WireGuard', 'Microsoft 365', 'FreshService'],
+      stack: ['VMware vSphere', 'HPE SimpliVity', 'Azure', 'Cisco Meraki', 'Fortinet', 'Cloudflare', 'WireGuard', 'Microsoft 365', 'Freshservice'],
     },
     {
       company: 'SR Traffic Service Inc.',
-      companyContext: 'Cross-border logistics operator running four distribution facilities between the US and Mexico.',
+      companyContext: 'Cross-border logistics company operating 4 distribution facilities between the U.S. and Mexico.',
       role: 'Software Engineer',
       location: 'Laredo, TX',
       dates: 'Jan 2010 – Jun 2017',
       bullets: [
-        { text: 'Built a Warehouse Management System from scratch — barcode generation, handheld scanner integration, mobile and desktop clients, real-time inventory, customs documentation, and client-facing reporting. Served 20+ international clients across 4 facilities.' },
-        { text: 'Designed REST APIs and SQL-backed workflows powering inventory, dispatch, customs paperwork, and customer portals.' },
-        { text: 'Automated build, test, and deployment processes; migrated workloads to cloud infrastructure for scalability and cost control.' },
-        { text: 'Ran regular security audits and led remediation work across business-critical systems.', includeInPdf: false },
+        'Designed and built a warehouse management system (WMS) from the ground up, with barcode generation, handheld scanner integration, mobile and desktop clients, real-time inventory, customs documentation, and client reporting for 20+ international clients across 4 facilities.',
+        'Developed REST APIs, SQL-backed workflows, and customer portals that automated inventory, dispatch, and customs paperwork.',
+        'Automated build, test, and deployment and migrated workloads to the cloud; implemented database backup and recovery for WMS and client data, and led regular security audits and remediation.',
       ],
-      stack: ['JavaScript', 'PHP', 'SQL', 'REST APIs', 'BASH', 'Filemaker Claris', 'Cloud Infrastructure', 'CI/CD Foundations'],
+      stack: ['JavaScript', 'PHP', 'SQL', 'REST APIs', 'Bash', 'CI/CD'],
     },
   ],
 
+  // Website only (pdfSections.projects is false).
   projects: [
     {
-      name: 'Start Blue — Production Quote Platform',
+      name: 'Start Blue — Official Tractor Quoting Platform',
       url: 'startblue.lstractorusa.com',
+      page: '/projects/start-blue/',
       description:
-         'Design and operate a production 3-node Kubernetes platform serving more than 350 dealers across the US and Canada. Built the React + PostgreSQL application, deployment pipelines, backup strategy, and disaster recovery. Two years in production with no major incidents and more than 2,000 quotes processed.',
-      stack: ['Kubernetes', 'Linode', 'React', 'PostgreSQL', 'Docker', 'GitHub Actions'],
-    },
-    
-    {
-      name: 'LS Academy — Learning Platform (in progress)',
-      description:
-          'Designing a Kubernetes-hosted learning platform for more than 500 users using GitOps, Argo CD, and GitHub Actions to standardize deployments and application lifecycle management.',
-      stack: ['Kubernetes', 'Argo CD', 'GitHub Actions', 'GitOps'],
-      includeInPdf: false,
+        "LS Tractor's official tractor quoting tool for the U.S. and Canada, open to the public, with secure accounts for 350+ dealerships. React, Django, and PostgreSQL on a three-node Kubernetes cluster, delivered through GitHub Actions and Flux CD, with automated restic backups. In production for over two years without a major incident; 3,000+ quotes generated.",
+      stack: ['Kubernetes', 'Flux CD', 'GitHub Actions', 'React', 'Django', 'PostgreSQL', 'Linode/Akamai'],
     },
     {
-      name: 'Azure AD / Entra ID Migration',
+      name: 'LS Academy — Learning Platform',
+      page: '/projects/ls-academy/',
       description:
-        'Modernized enterprise identity by migrating more than 200 users from on-prem Active Directory to Microsoft Entra ID with Azure AD Connect, MFA, Conditional Access, GPO modernization, and NAS-to-OneDrive migration.',
-      stack: ['Azure AD / Entra ID', 'Azure AD Connect', 'Microsoft 365', 'PowerShell'],
+        'Moodle learning management system on Kubernetes for 500+ dealers, employees, and U.S. LS Group affiliates, deployed through Argo CD and GitHub Actions.',
+      stack: ['Kubernetes', 'Moodle', 'Argo CD', 'GitHub Actions', 'GitOps'],
     },
-    {
-  name: 'Cybersecurity & Disaster Recovery',
-  description:
-      'Designed and implemented a multi-layer backup and disaster recovery strategy, secured public-facing services with Cloudflare, deployed WireGuard VPN for secure remote access, and strengthened infrastructure security through network hardening and recovery validation.',
-  stack: ['Cloudflare', 'WireGuard', 'Linux', 'Backup & DR', 'Networking'],
-    },
-    
-    
-    
-    {
-      name: 'Personal Developer Platform',
-      url: 'github.com/jfrancolopez/Domum',
-      description:
-          'Self-hosted platform running Talos Kubernetes, Proxmox, Docker, and Debian infrastructure. Uses GitOps workflows to automate service deployment, secrets management, monitoring, backups, DNS, and platform operations for continuous experimentation and infrastructure development.',
-      stack: ['Proxmox', 'Kubernetes', 'Docker', 'GitOps', 'Linux', 'Traefik', 'Talos', 'Flux CD', 'Helm'],
-      includeInPdf: false,
-    },
-    
     {
       name: 'LS Tractor Dealer Recruitment Site',
       url: 'recruitment.lstractorusa.com',
       description:
-        'Corporate recruitment funnel for prospective LS Tractor dealers. Owned design, frontend build, deployment, DNS, and TLS on a corporate subdomain.',
-      stack: ['HTML/CSS/JS', 'DNS/TLS', 'Subdomain Provisioning'],
-      includeInPdf: false,
+        'Recruitment site for prospective LS Tractor dealers. Owned design, frontend build, deployment, DNS, and TLS on a corporate subdomain.',
+      stack: ['HTML/CSS/JS', 'DNS', 'TLS'],
     },
     {
-      name: 'LibrAIry — AI-Powered File Organization',
+      name: 'AI-Assisted File Organization Tool',
       url: 'github.com/jfrancolopez/LibrAIry',
       description:
-         'AI-assisted file organization pipeline combining local language models, metadata fingerprinting, and Bash automation to classify, analyze, and organize large file collections without relying on cloud services.',
-      stack: ['Bash', 'Local AI Models', 'Linux'],
-      includeInPdf: false,
-    },
-    
-    
-  ],
-
-  educationAndCertifications: [
-    {
-      title: 'Certified Kubernetes Administrator (CKA)',
-      issuer: 'The Linux Foundation',
-      status: 'In progress',
+        'Bash tool that uses local language models and metadata fingerprinting to classify a shared, multi-department file server and flag duplicates, keeping company data on-premises with human review before any change.',
+      stack: ['Bash', 'Local LLMs', 'Linux'],
     },
     {
-      title: 'B.S. Computer Systems Engineering',
-      issuer: 'Universidad del Valle de México',
-      status: '2005 – 2010',
-    },
-    {
-      title: 'Microsoft Azure Fundamentals (AZ-900)',
-      issuer: 'Microsoft',
-      status: 'Mar 2022',
-    },
-    {
-      title: 'Engineering Cisco Meraki Solutions',
-      issuer: 'Cisco Meraki',
-      status: 'Sep 2021',
-
-    },
-    {
-      title: 'HPE SimpliVity 380 System Administration (VMware)',
-      issuer: 'HPE',
-      status: 'Apr 2019',
-
+      name: 'Personal Developer Platform',
+      url: 'github.com/jfrancolopez/Domum',
+      page: '/projects/homelab-gitops/',
+      description:
+        'Self-hosted platform on Talos Kubernetes, Proxmox, Docker, and Debian, using GitOps to automate service deployment, secrets management, backups, DNS, and platform operations.',
+      stack: ['Proxmox', 'Kubernetes', 'Talos', 'Flux CD', 'Helm', 'Traefik', 'Docker'],
     },
   ],
 
+  certifications: [
+    { title: 'Certified Kubernetes Administrator (CKA)', issuer: 'The Linux Foundation', date: 'in progress' },
+    { title: 'Implementing and Administering Cisco Solutions (CCNA)', issuer: 'Cisco', date: '2022' },
+    { title: 'Microsoft Certified: Azure Fundamentals (AZ-900)', issuer: 'Microsoft', date: '2022' },
+    { title: 'Engineering Cisco Meraki Solutions', issuer: 'Cisco Meraki', date: '2021' },
+    { title: 'HPE SimpliVity 380 System Administration (VMware)', issuer: 'HPE', date: '2019' },
+  ],
+
+  education: [
+    { title: 'B.S. Computer Systems Engineering', issuer: 'Universidad del Valle de México', date: '2010' },
+  ],
+
+  // Short form for the PDF; the website shows the longer list below.
+  pdfLearning: 'Terraform, Go',
   currentlyLearning: [
-    'Certified Kubernetes Administrator (CKA) — in progress',
-    'Argo CD and advanced GitOps patterns (deploying with LS Academy)',
-    'Terraform and Infrastructure as Code (next, post-CKA)',
-    'Go Programming Language (for building Kubernetes tooling and automation) (on the roadmap)',
-    'Building with AI developer tools (Claude Code, MCP, agentic workflows) for infrastructure automation and documentation',
+    'Certified Kubernetes Administrator (CKA), in progress',
+    'Terraform and infrastructure as code',
+    'Go, for Kubernetes tooling and automation',
+    'AI developer tools (Claude Code, MCP, agentic workflows) for infrastructure automation and documentation',
   ],
 };

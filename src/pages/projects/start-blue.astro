@@ -2,52 +2,57 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Start Blue | Franco Lopez" description="Start Blue is a Kubernetes-based quote platform used by 350+ LS Tractor dealers across the US and Canada.">
+<BaseLayout title="Start Blue | Franco Lopez" description="Start Blue is LS Tractor's official tractor quoting platform for the U.S. and Canada, running on Kubernetes and used by customers and 350+ dealerships.">
   <header class="page-header">
-    <span class="eyebrow">production platform · 350+ dealers</span>
+    <span class="eyebrow">production platform · 350+ dealerships</span>
     <h1>Start Blue</h1>
     <p class="lead">
-      A Kubernetes-based quote platform used by LS Tractor dealers across the United States and Canada.
+      LS Tractor's official tractor quoting platform for the U.S. and Canada: open to the public, with
+      secure accounts for 350+ dealerships.
     </p>
     <div class="actions">
-      <a class="button primary" href="https://startblue.lstractorusa.com">Visit platform</a>
-      <a class="button" href="/projects/">Back to projects</a>
+      <a class="button primary" href="https://startblue.lstractorusa.com" target="_blank" rel="noopener noreferrer">Visit platform</a>
+      <a class="button" href="/blog/dev/start-blue-lessons-from-a-dealer-quote-platform/">What it taught me</a>
     </div>
   </header>
 
   <article class="content">
     <h2>Problem</h2>
     <p>
-      Dealer quote workflows needed a centralized system that could support real business use across a
-      large dealer network instead of relying on scattered manual processes.
+      Dealer quotes depended on spreadsheets, PDFs, and a lot of manual work. It worked, but it wasn't
+      consistent, and keeping pricing current across hundreds of dealers was hard.
     </p>
 
     <h2>What I built</h2>
     <p>
-      I designed and operated Start Blue as a cloud-hosted, containerized quote platform with React
-      workflows, PostgreSQL data storage, Kubernetes deployment, analytics, and business reporting.
+      I designed, built, and operate Start Blue. It holds the full tractor inventory and configurations, so
+      anyone can configure a tractor and get a quote in a few clicks. Dealerships sign in with their own
+      accounts to save quotes and apply their own pricing. More than 3,000 quotes have been generated.
     </p>
 
     <h2>Architecture</h2>
     <ul>
-      <li>React frontend for dealer quote workflows</li>
-      <li>PostgreSQL backend data layer</li>
-      <li>Containerized application workloads</li>
-      <li>Kubernetes deployment model</li>
-      <li>Cloud-hosted infrastructure with operational ownership</li>
+      <li>React frontend, Django backend, and PostgreSQL, with object storage for files</li>
+      <li>Three-node Kubernetes cluster on Linode/Akamai</li>
+      <li>GitOps delivery: GitHub Actions builds images, Flux CD reconciles the cluster from Git</li>
+      <li>SOPS for encrypted secrets in the repository</li>
+      <li>Traefik and cert-manager for ingress and automated TLS certificates</li>
+      <li>Automated restic backups of application data and cluster configuration</li>
     </ul>
 
     <h2>Operational concerns</h2>
     <p>
-      The important part was not only writing the application. It had to be deployable, supportable,
-      understandable by the business, and reliable enough for a distributed dealer audience.
+      Writing the application was only part of the job. I also own the container images, deployments,
+      backups, PostgreSQL, monitoring, DNS, and TLS. Running a database inside Kubernetes means planning
+      for persistent data, backups, and schema changes, not just restarting containers.
     </p>
 
     <h2>Impact</h2>
     <p>
-      Start Blue is used by 350+ dealers across the US and Canada. It is the clearest example on this
-      site of the work I want to do more of: building practical platforms that combine software,
-      infrastructure, deployment, and operations.
+      Start Blue has been in production for over two years without a major incident. I presented it at
+      LS Mtron's headquarters in South Korea, including to the Global CEO, and the work was recognized
+      with the 2025 CEO Award for Employee of the Year. I'm now working with engineering teams there to
+      adapt it for multiple languages and other global markets.
     </p>
   </article>
 </BaseLayout>

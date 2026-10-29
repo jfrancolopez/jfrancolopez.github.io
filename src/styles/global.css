@@ -883,6 +883,14 @@ p {
   max-width: 920px;
 }
 
+.resume-header .headline-sub {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.55em;
+  line-height: 1.2;
+  color: var(--muted, inherit);
+}
+
 .resume-intro {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;

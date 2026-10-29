@@ -1,269 +1,137 @@
 <!doctype html>
-<!-- Generated from src/data/resume.js. Do not edit by hand. -->
+<!-- Generated from src/data/resume.js by tools/generate-resume-pdf.mjs. Do not edit by hand. -->
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Franco Lopez — Resume</title>
-    <style>
-      @page { size: Letter; margin: 0.34in 0.45in; }
+<head>
+<meta charset="utf-8">
+<title>Franco Lopez — Resume</title>
+<meta name="author" content="Franco Lopez">
+<meta name="description" content="Platform &amp; DevOps Engineer | IT Infrastructure &amp; Operations Leader">
+<style>
+  @font-face { font-family: "Inter"; font-style: normal; font-weight: 400; font-display: block;
+    src: url("../node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2") format("woff2"),
+         url("../node_modules/@fontsource/inter/files/inter-latin-ext-400-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Inter"; font-style: normal; font-weight: 600; font-display: block;
+    src: url("../node_modules/@fontsource/inter/files/inter-latin-600-normal.woff2") format("woff2"),
+         url("../node_modules/@fontsource/inter/files/inter-latin-ext-600-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Inter"; font-style: normal; font-weight: 700; font-display: block;
+    src: url("../node_modules/@fontsource/inter/files/inter-latin-700-normal.woff2") format("woff2"),
+         url("../node_modules/@fontsource/inter/files/inter-latin-ext-700-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Inter"; font-style: italic; font-weight: 400; font-display: block;
+    src: url("../node_modules/@fontsource/inter/files/inter-latin-400-italic.woff2") format("woff2"),
+         url("../node_modules/@fontsource/inter/files/inter-latin-ext-400-italic.woff2") format("woff2"); }
 
-      * { box-sizing: border-box; }
+  @page { size: Letter; }
+  :root { --ink: #1b1f24; --muted: #5b6573; --accent: #1f3a5f; --rule: #c9d1db; }
+  * { box-sizing: border-box; }
+  html { font-family: "Inter", "Helvetica Neue", Arial, sans-serif; color: var(--ink); font-size: 9.5pt; line-height: 1.36; }
+  body { margin: 0; }
 
-      body {
-        margin: 0;
-        color: #1a1a1a;
-        font-family: "Calibri", "Helvetica Neue", Helvetica, Arial, sans-serif;
-        font-size: 8.63pt;
-        line-height: 1.18;
-      }
+  header { padding-bottom: 8pt; border-bottom: 2pt solid var(--accent); margin-bottom: 9pt; }
+  h1 { font-weight: 700; font-size: 25pt; letter-spacing: 0.5pt; margin: 0; line-height: 1.05; color: var(--ink); }
+  .headline { font-weight: 600; font-size: 11.5pt; color: var(--accent); margin-top: 4pt; }
+  .tagline { font-size: 9pt; color: var(--muted); margin-top: 2pt; }
+  .contact { font-size: 8.5pt; color: var(--ink); margin-top: 6pt; }
+  .contact span { white-space: nowrap; }
+  .contact span + span::before { content: "·"; color: var(--rule); margin: 0 4.5pt; }
 
-      h1, h2, h3, p, ul { margin: 0; padding: 0; }
-      ul { list-style: disc; padding-left: 12.5pt; }
-      li { margin-bottom: 0.35pt; }
+  h2 { font-size: 8.6pt; font-weight: 700; letter-spacing: 0.6pt; text-transform: uppercase; color: var(--accent);
+       margin: 11pt 0 5pt; padding-bottom: 2.5pt; border-bottom: 0.75pt solid var(--rule); break-after: avoid; }
 
-      /* ===== HEADER ===== */
-      .header {
-        padding-bottom: 4pt;
-        border-bottom: 1.2pt solid #1a1a1a;
-        margin-bottom: 6pt;
-      }
-      .name {
-        font-size: 20pt;
-        font-weight: 700;
-        letter-spacing: -0.4px;
-        line-height: 1.05;
-      }
-      .headline {
-        margin-top: 1pt;
-        font-size: 9pt;
-        font-weight: 500;
-        color: #444;
-      }
-      .contact-line {
-        margin-top: 3pt;
-        color: #555;
-        font-size: 8.2pt;
-      }
+  .summary { margin: 0; }
 
-      /* ===== SECTIONS ===== */
-      h2 {
-        
-        margin-top: 4pt;
-        margin-bottom: 3pt;
-        padding-top: 3pt;
-        border-bottom: 1pt solid #d8d8d8;
-        color: #1a1a1a;
-        font-size: 9pt;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.75px;
-      }
+  dl.skills { display: grid; grid-template-columns: 1.45in 1fr; column-gap: 10pt; row-gap: 2pt; margin: 0; }
+  dl.skills dt { font-weight: 600; color: var(--ink); }
+  dl.skills dd { margin: 0; color: #2b313a; }
 
-      .summary + h2 {
-        margin-top: 4pt;
-      }
+  .job { margin-top: 8pt; }
+  .job:first-of-type { margin-top: 2pt; }
+  .job-head { display: flex; justify-content: space-between; align-items: baseline; break-after: avoid; }
+  .company { font-weight: 700; font-size: 10.4pt; }
+  .dates { font-size: 8.8pt; color: var(--muted); white-space: nowrap; }
+  .role { display: flex; justify-content: space-between; align-items: baseline; font-weight: 600; color: var(--accent); font-size: 9.6pt; break-after: avoid; }
+  .role .loc { font-weight: 400; color: var(--muted); font-size: 8.8pt; }
+  .context { font-style: italic; color: var(--muted); font-size: 9pt; margin: 2pt 0 4pt; break-after: avoid; }
 
-      /* ===== SKILLS GRID ===== */
-      .skills-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        column-gap: 18pt;
-        row-gap: 3pt;
-        margin-top: 2pt;
-      }
+  ul { margin: 0; padding-left: 12pt; }
+  li { margin: 0 0 2.2pt; padding-left: 1pt; break-inside: avoid; }
+  li::marker { color: var(--accent); }
+  .edu li { margin-bottom: 1.5pt; }
+  .certs { margin: 3pt 0; }
+  .line { margin: 0; }
+  .line + .line { margin-top: 2pt; }
+  .lbl { font-weight: 600; }
+  .nw { white-space: nowrap; }
+</style>
+</head>
+<body>
+<header>
+  <h1>FRANCO LOPEZ</h1>
+  <div class="headline">Platform &amp; DevOps Engineer | IT Infrastructure &amp; Operations Leader</div>
+  <div class="tagline">Kubernetes · <span class="nw">CI/CD</span> · Azure · Networking · Manufacturing &amp; Plant IT · Solutions Engineering · Bilingual <span class="nw">EN/ES</span></div>
+  <div class="contact"><span>Raleigh–Durham, NC</span><span>hello@jfrancolopez.com</span><span>linkedin.com/in/jfranco-lopez</span><span>github.com/jfrancolopez</span><span>jfrancolopez.com</span></div>
+</header>
 
-      .skill-cell {
-        min-width: 0;
-      }
+<h2>Summary</h2>
+<p class="summary">Platform engineer and IT leader with 15+ years across software development, infrastructure, and <span class="nw">24/7</span> production operations. As Head of IT for LS Tractor&#039;s U.S. and Canada division, designed, built, and operate the company&#039;s official tractor quoting platform on Kubernetes, in production for over two years without a major incident. Built IT for three new manufacturing plants, including an $80M automated facility, and cut <span class="nw">production-line</span> recovery time from over 60 minutes to under 10. Bilingual in English and Spanish, pursuing the CKA, and recipient of the 2025 CEO Award for Employee of the Year.</p>
 
-      .skill-label {
-        display: block;
-        font-weight: 700;
-        font-size: 8.6pt;
-        margin-bottom: 0.5pt;
+<h2>Skills</h2>
+<dl class="skills"><dt>Containers</dt><dd>Kubernetes (Linode LKE, Talos Linux), Docker, Helm, Traefik, <span class="nw">cert-manager</span></dd>
+<dt><span class="nw">CI/CD</span> &amp; GitOps</dt><dd><span class="nw">GitHub Actions</span>, <span class="nw">Flux CD</span>, <span class="nw">Argo CD</span>, Ansible, SOPS secrets management, infrastructure as code (Helm, Kubernetes manifests)</dd>
+<dt>Cloud &amp; identity</dt><dd>Microsoft Azure (IaaS, <span class="nw">Entra ID</span>, Conditional Access, MFA), Active Directory, Microsoft 365, Google Cloud, <span class="nw">Linode/Akamai</span>, Cloudflare</dd>
+<dt>Infrastructure &amp; OT</dt><dd>Linux, Windows Server, VMware vSphere, HPE SimpliVity, <span class="nw">Hyper-V</span>, Proxmox, <span class="nw">IT/OT</span> integration, <span class="nw">production-line</span> systems, video surveillance</dd>
+<dt>Network &amp; security</dt><dd>Fortinet firewalls, Cisco, Cisco Meraki, <span class="nw">site-to-site</span> VPN, WireGuard, IDS, VLAN segmentation, Cloudflare <span class="nw">DNS/WAF</span>, <span class="nw">TCP/IP</span>, DNS, TLS</dd>
+<dt>Reliability (SRE)</dt><dd>Backup and disaster recovery (restic), failover testing, DR drills, incident response, <span class="nw">on-call</span>, <span class="nw">24/7</span> production support</dd>
+<dt>Programming &amp; automation</dt><dd>Python, Django, Bash, PowerShell, JavaScript, React, SQL, PostgreSQL, PHP, REST APIs, <span class="nw">Power Automate</span>, local LLMs, Claude Code</dd>
+<dt>Delivery &amp; leadership</dt><dd>Solution design, technical presentations, Freshservice ITSM, SLA design, vendor management, IT roadmaps, team leadership</dd></dl>
 
-      }
+<h2>Experience</h2>
 
-      .skill-items {
-        display: block;
-        color: #333;
-        padding-left: 6pt;
-        font-size: 8.3pt;
-        line-height: 1.18;
-        margin-bottom: 2pt;
-      }
+<section class="job">
+  <div class="job-head"><span class="company">LS Tractor USA</span><span class="dates">Oct 2022 – Present</span></div>
+  <div class="role"><span>IT Manager (Head of IT, U.S. &amp; Canada)</span><span class="loc">Raleigh, NC</span></div>
+  <div class="context">North American division of LS Mtron (LS Group, South Korea), with 6 U.S. sites, 200+ employees, and 350+ dealerships across the U.S. and Canada.</div>
+  <ul><li>Designed, built, and operate Start Blue, LS Tractor&#039;s official tractor quoting platform for the U.S. and Canada. Anyone can configure a tractor and get a quote in a few clicks, and 350+ dealerships use secure accounts to save quotes and apply their own pricing; 3,000+ quotes generated.</li>
+<li>Run the platform on a <span class="nw">three-node</span> Kubernetes cluster (React, Django, PostgreSQL) delivered through GitOps: <span class="nw">GitHub Actions</span> builds images, <span class="nw">Flux CD</span> reconciles the cluster from Git, SOPS encrypts secrets, and Traefik and <span class="nw">cert-manager</span> handle ingress and automated TLS. In production for over two years without a major incident.</li>
+<li>Presented Start Blue at LS Mtron headquarters in South Korea, including to the Global CEO; now adapting it with engineering teams there for multiple languages and global markets.</li>
+<li>Designed backup and disaster recovery for production platforms and company data, with automated restic backups of application data and cluster configuration and tested recovery procedures.</li>
+<li>Led IT for two new manufacturing facilities in 2025, in <span class="nw">Palestine, TX</span> and <span class="nw">Battleboro, NC</span>, from planning through <span class="nw">go-live</span>, delivering networking, <span class="nw">site-to-site</span> VPN, compute, security, and identity without disrupting existing sites.</li>
+<li>Led the migration of 200+ users from <span class="nw">on-premises</span> Active Directory to Microsoft <span class="nw">Entra ID</span>, implementing Azure AD Connect, MFA, and Conditional Access, modernizing Group Policy, and moving file shares to OneDrive.</li>
+<li>Manage networking and security across all sites (Fortinet firewalls, <span class="nw">site-to-site</span> VPN, secure remote access), and deployed 130+ security cameras with a 200 TB storage server designed for <span class="nw">6-month</span> retention.</li>
+<li>Developed and support LS Academy, a Moodle learning management system (LMS) on Kubernetes for 500+ dealers, employees, and U.S. LS Group affiliates, deployed through <span class="nw">Argo CD</span> and <span class="nw">GitHub Actions</span>.</li>
+<li>Automated business processes with Microsoft 365, <span class="nw">Power Apps</span>, and <span class="nw">Power Automate</span>, including an internal ticketing system, and built an <span class="nw">AI-assisted</span> file organization tool that uses local language models to classify a shared, <span class="nw">multi-department</span> file server and flag duplicates, with human review before any change.</li>
+<li>Lead a team of 4 IT professionals, serve as the escalation point for production incidents, and present IT roadmaps, project status, and risks to division leadership. Received the 2025 CEO Award for Employee of the Year.</li></ul>
+</section>
+<section class="job">
+  <div class="job-head"><span class="company">Interamerican Foods Corp. / La Moderna USA</span><span class="dates">Jun 2017 – Oct 2022</span></div>
+  <div class="role"><span>IT Manager</span><span class="loc">Cleburne, TX</span></div>
+  <div class="context">U.S. subsidiary of Grupo La Moderna, one of Latin America&#039;s largest pasta manufacturers. Its first U.S. plant produces <span class="nw">private-label</span> pasta for Walmart (Great Value), Campbell&#039;s, and Goya.</div>
+  <ul><li>Owned all technology for a new $80M automated manufacturing plant, from greenfield buildout through <span class="nw">24/7</span> production, covering network and wireless, cybersecurity, video surveillance, servers and storage (VMware on HPE SimpliVity), identity, and <span class="nw">OT/IT</span> integration for production and packaging lines.</li>
+<li>Led a team of 3 IT staff with <span class="nw">on-call</span> coverage for <span class="nw">24/7</span> production, and presented technology plans and launch readiness to executive and plant leadership.</li>
+<li>Automated <span class="nw">multi-tier</span> backup and disaster recovery for production and <span class="nw">packaging-line</span> servers, with failover testing and regular DR drills, reducing recovery time from over 60 minutes to under 10.</li>
+<li>Led the selection and implementation of Freshservice ITSM for 27 sites and 2,500+ users across the U.S., Mexico, and Guatemala, configuring SLAs, policies, automated workflows, and reporting.</li>
+<li>Rolled out Cisco Meraki switching, wireless, and cameras across all U.S. sites with zero production downtime.</li>
+<li>Secured all sites with <span class="nw">site-to-site</span> VPN, <span class="nw">next-generation</span> firewalls, intrusion detection (IDS), Cloudflare DNS and WAF, WireGuard remote access, and network segmentation; delivered regular security awareness training.</li>
+<li>Built a <span class="nw">cloud-hosted</span> web platform for freight scheduling, document management, and logistics coordination; ran the company&#039;s official U.S. website on Azure IaaS; and migrated 100+ users to Microsoft 365.</li></ul>
+</section>
+<section class="job">
+  <div class="job-head"><span class="company">SR Traffic Service Inc.</span><span class="dates">Jan 2010 – Jun 2017</span></div>
+  <div class="role"><span>Software Engineer</span><span class="loc">Laredo, TX</span></div>
+  <div class="context"><span class="nw">Cross-border</span> logistics company operating 4 distribution facilities between the U.S. and Mexico.</div>
+  <ul><li>Designed and built a warehouse management system (WMS) from the ground up, with barcode generation, handheld scanner integration, mobile and desktop clients, <span class="nw">real-time</span> inventory, customs documentation, and client reporting for 20+ international clients across 4 facilities.</li>
+<li>Developed REST APIs, <span class="nw">SQL-backed</span> workflows, and customer portals that automated inventory, dispatch, and customs paperwork.</li>
+<li>Automated build, test, and deployment and migrated workloads to the cloud; implemented database backup and recovery for WMS and client data, and led regular security audits and remediation.</li></ul>
+</section>
 
-      /* ===== EXPERIENCE ===== */
-      .job {
-        margin-top: 2.8pt;
-      }
-      .job:first-of-type { margin-top: 1pt; }
 
-      .job-divider {
-        display: none;
-      }
 
-      .job-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: baseline;
-        gap: 12pt;
-      }
-      .job-title-line {
-        font-size: 9.2pt;
-      }
-      .job-company {
-        font-weight: 700;
-        color: #1a1a1a;
-      }
-      .job-sep {
-        color: #1a1a1a;
-        font-weight: 700;
-      }
-      .job-role {
-        font-weight: 600;
-        color: #333;
-      }
-      .job-loc {
-        color: #666;
-        font-style: italic;
-        font-weight: 400;
-        font-size: 8.2pt;
-      }
-      .job-dates {
-        white-space: nowrap;
-        color: #555;
-        font-size: 8.2pt;
-        font-variant-numeric: tabular-nums;
-      }
-      .company-context {
-        margin-top: 1pt;
-        color: #555;
-        font-size: 8.8pt;
-      }
-      .job ul { margin-top: 1pt; }
+<h2>Education &amp; Certifications</h2>
+<p class="line"><span class="lbl">B.S. Computer Systems Engineering</span> — Universidad del Valle de México, 2010</p>
+<ul class="edu certs"><li>Certified Kubernetes Administrator (CKA) — The Linux Foundation, in progress</li>
+<li>Implementing and Administering Cisco Solutions (CCNA) — Cisco, 2022</li>
+<li>Microsoft Certified: Azure Fundamentals (<span class="nw">AZ-900</span>) — Microsoft, 2022</li>
+<li>Engineering Cisco Meraki Solutions — Cisco Meraki, 2021</li>
+<li>HPE SimpliVity 380 System Administration (VMware) — HPE, 2019</li></ul>
+<p class="line"><span class="lbl">Currently learning:</span> Terraform, Go</p>
 
-      /* ===== PROJECTS ===== */
-      .project {
-        margin-top: 2.2pt;
-        padding-top: 2.2pt;
-        border-top: 0.35pt solid #e1e1e1;
-      }
-      .project:first-of-type {
-        margin-top: 2pt;
-        padding-top: 0;
-        border-top: none;
-      }
-      .project-title { font-size: 9.8pt; }
-      .project-desc { font-size: 8.7pt; }
-      .project-name { font-weight: 700; }
-      .project-url {
-        color: #666;
-        font-size: 8.5pt;
-        font-weight: 400;
-      }
-      .project-desc {
-        margin-top: 1pt;
-        padding-left: 6pt;
-        color: #1a1a1a;
-      }
-
-      /* ===== CERTS ===== */
-      .cert-title { font-weight: 400; }
-      .cert-status {
-        color: #555;
-        font-size: 7pt;
-      }
-
-      /* ===== OPTIONAL ===== */
-      .stack-line {
-        margin-top: 2pt;
-        color: #555;
-        font-size: 9pt;
-      }
-      .meta-label { font-weight: 700; color: #333; }
-
-      /* ===== PAGE BREAKS ===== */
-      .job, .project { break-inside: avoid; }
-      .generation-note { display: none; }
-    </style>
-  </head>
-  <body>
-    <div class="header">
-      <p class="name">Franco Lopez</p>
-      <p class="headline">Platform &amp; DevOps Engineer</p>
-      <p class="contact-line">Raleigh-Durham, NC  ·  hello@jfrancolopez.com  ·  jfrancolopez.com  ·  linkedin.com/in/jfranco-lopez  ·  github.com/jfrancolopez</p>
-      
-    </div>
-
-    <p class="summary">Platform and DevOps engineer with over 15 years of experience in software engineering, cloud infrastructure, and production systems. I design and operate Kubernetes platforms, modernize cloud and identity infrastructure, and build automation and internal platforms used by hundreds of users across North America. Bilingual in English and Spanish.</p>
-
-    <h2>Core Stack</h2>
-    <div class="skills-grid"><div class="skill-cell"><span class="skill-label">Platform Engineering</span><span class="skill-items">Linux · Kubernetes · Docker · Talos Linux · VMware · Hyper-V · Networking · Fortinet · Cisco</span></div><div class="skill-cell"><span class="skill-label">Cloud &amp; Identity</span><span class="skill-items">Microsoft Azure · GCP · Linode · Cloudflare · Azure IaaS · Azure AD / Entra ID · MFA · Conditional Access</span></div><div class="skill-cell"><span class="skill-label">DevOps &amp; Automation</span><span class="skill-items">GitOps · Flux CD · GitHub Actions · CI/CD · Helm · Bash · Python · Automation</span></div><div class="skill-cell"><span class="skill-label">Development</span><span class="skill-items">PostgreSQL · REST APIs · SQL · React · Claris Filemaker · PHP · Microsoft 365</span></div></div>
-
-    <h2>Experience</h2>
-    
-    <div class="job">
-      <div class="job-header">
-        <div class="job-title-line">
-          <span class="job-company">LS Tractor USA</span>
-          <span class="job-sep"> — </span>
-          <span class="job-role">IT Manager — Platform Engineering</span>
-          <span class="job-loc"> · Raleigh, NC</span>
-        </div>
-        <span class="job-dates">Oct 2022 – Present</span>
-      </div>
-      
-      <ul><li>Lead platform engineering initiatives supporting manufacturing systems, dealer platforms, cloud infrastructure, networking, identity, and cybersecurity across North American operations.</li><li>Design and operate production Kubernetes platforms supporting internal and dealer-facing applications, including CI/CD workflows, containerized deployments, backup strategies, and disaster recovery.</li><li>Modernized enterprise identity by migrating 200+ users from on-prem Active Directory to Microsoft Entra ID with Azure AD Connect, MFA, Conditional Access, and OneDrive adoption.</li><li>Designed and deployed complete infrastructure for new manufacturing facilities in Texas and North Carolina, including networking, compute, security, identity, and secure remote access.</li><li>Build internal platforms and automation that streamline dealer operations, employee training, and corporate workflows.</li></ul>
-      
-    </div><hr class="job-divider" />
-    <div class="job">
-      <div class="job-header">
-        <div class="job-title-line">
-          <span class="job-company">Interamerican Foods Corp. / La Moderna USA</span>
-          <span class="job-sep"> — </span>
-          <span class="job-role">IT Manager — Cloud Infrastructure</span>
-          <span class="job-loc"> · Cleburne, TX</span>
-        </div>
-        <span class="job-dates">Jun 2017 – Oct 2022</span>
-      </div>
-      
-      <ul><li>Stood up the entire IT and infrastructure stack for a 24/7 automated manufacturing facility from greenfield — networking, compute, storage, identity, and OT/IT integration.</li><li>Designed and deployed the company&#039;s US web platform (lamodernausa.com) on Azure IaaS, including DNS, TLS, and supporting infrastructure.</li><li>Built and implemented a multi-tier cloud backup and disaster recovery system to protect multiple 24/7 production and packaging line servers, with automated validation and failover testing, reducing recovery time from over 1 hour to under 10 minutes.</li><li>Hardened the perimeter with next-gen firewalls, Cloudflare DNS/WAF, WireGuard VPN, and network segmentation across distributed sites.</li><li>Led Cisco Meraki rollout (networking, wireless, security cameras) across all US locations with zero production downtime.</li></ul>
-      
-    </div><hr class="job-divider" />
-    <div class="job">
-      <div class="job-header">
-        <div class="job-title-line">
-          <span class="job-company">SR Traffic Service Inc.</span>
-          <span class="job-sep"> — </span>
-          <span class="job-role">Software Engineer</span>
-          <span class="job-loc"> · Laredo, TX</span>
-        </div>
-        <span class="job-dates">Jan 2010 – Jun 2017</span>
-      </div>
-      
-      <ul><li>Built a Warehouse Management System from scratch — barcode generation, handheld scanner integration, mobile and desktop clients, real-time inventory, customs documentation, and client-facing reporting. Served 20+ international clients across 4 facilities.</li><li>Designed REST APIs and SQL-backed workflows powering inventory, dispatch, customs paperwork, and customer portals.</li><li>Automated build, test, and deployment processes; migrated workloads to cloud infrastructure for scalability and cost control.</li></ul>
-      
-    </div>
-
-    <h2>Projects</h2>
-    
-    <div class="project">
-      <p class="project-title"><span class="project-name">Start Blue — Production Quote Platform</span> <span class="project-url">startblue.lstractorusa.com</span></p>
-      <p class="project-desc">Design and operate a production 3-node Kubernetes platform serving more than 350 dealers across the US and Canada. Built the React + PostgreSQL application, deployment pipelines, backup strategy, and disaster recovery. Two years in production with no major incidents and more than 2,000 quotes processed.</p>
-    </div>
-    <div class="project">
-      <p class="project-title"><span class="project-name">Azure AD / Entra ID Migration</span></p>
-      <p class="project-desc">Modernized enterprise identity by migrating more than 200 users from on-prem Active Directory to Microsoft Entra ID with Azure AD Connect, MFA, Conditional Access, GPO modernization, and NAS-to-OneDrive migration.</p>
-    </div>
-    <div class="project">
-      <p class="project-title"><span class="project-name">Cybersecurity &amp; Disaster Recovery</span></p>
-      <p class="project-desc">Designed and implemented a multi-layer backup and disaster recovery strategy, secured public-facing services with Cloudflare, deployed WireGuard VPN for secure remote access, and strengthened infrastructure security through network hardening and recovery validation.</p>
-    </div>
-
-    <h2>Education &amp; Certifications</h2>
-    <ul><li><span class="cert-title">Certified Kubernetes Administrator (CKA)</span> — The Linux Foundation <span class="cert-status">(In progress)</span></li><li><span class="cert-title">B.S. Computer Systems Engineering</span> — Universidad del Valle de México <span class="cert-status">(2005 – 2010)</span></li><li><span class="cert-title">Microsoft Azure Fundamentals (AZ-900)</span> — Microsoft <span class="cert-status">(Mar 2022)</span></li><li><span class="cert-title">Engineering Cisco Meraki Solutions</span> — Cisco Meraki <span class="cert-status">(Sep 2021)</span></li><li><span class="cert-title">HPE SimpliVity 380 System Administration (VMware)</span> — HPE <span class="cert-status">(Apr 2019)</span></li></ul>
-
-    
-  </body>
+</body>
 </html>

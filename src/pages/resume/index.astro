@@ -2,17 +2,18 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProfilePhoto from '../../components/ProfilePhoto.astro';
 import { resume } from '../../data/resume.js';
-
-// Normalize bullets to support both string and {text} object shapes
-const bulletText = (b) => (typeof b === 'string' ? b : b.text);
 ---
 <BaseLayout
   title={`Resume | ${resume.name}`}
-  description={`Resume for ${resume.name}, platform and DevOps engineer based in Raleigh-Durham, NC.`}
+  description={`Resume for ${resume.name}: platform and DevOps engineer and IT infrastructure leader based in Raleigh-Durham, NC.`}
 >
   <header class="page-header resume-header">
     <span class="eyebrow">resume</span>
-    <h1>{resume.headline}</h1>
+    <h1>
+      {resume.headline.split(' | ')[0]}
+      {resume.headline.split(' | ')[1] && <span class="headline-sub">{resume.headline.split(' | ')[1]}</span>}
+    </h1>
+    <p class="resume-meta">{resume.tagline}</p>
     <p class="resume-meta">{resume.location} · {resume.availability}</p>
   </header>
 
@@ -20,17 +21,17 @@ const bulletText = (b) => (typeof b === 'string' ? b : b.text);
     <div class="resume-intro-copy">
       <p class="lead">{resume.summary}</p>
       <div class="actions">
-        <a class="button primary" href="/FrancoLopez-Resume.pdf">Download PDF</a>
+        <a class="button primary" href="/FrancoLopez-Resume.pdf" download>Download PDF</a>
         <a class="button" href={`mailto:${resume.contact.email}`}>Email me</a>
-        <a class="button" href={`https://${resume.contact.linkedin}`} target="_blank" rel="noopener">LinkedIn</a>
-        <a class="button" href={`https://${resume.contact.github}`} target="_blank" rel="noopener">GitHub</a>
+        <a class="button" href={`https://${resume.contact.linkedin}`} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a class="button" href={`https://${resume.contact.github}`} target="_blank" rel="noopener noreferrer">GitHub</a>
       </div>
     </div>
     <ProfilePhoto />
   </section>
 
   <article class="content">
-    <h2>Technical Focus</h2>
+    <h2>Skills</h2>
     <ul class="skills-list">
       {resume.skills.map((skill) => (
         <li><strong>{skill.label}:</strong> {skill.items.join(', ')}</li>
@@ -40,11 +41,11 @@ const bulletText = (b) => (typeof b === 'string' ? b : b.text);
     <h2>Experience</h2>
     {resume.experience.map((job) => (
       <section class="experience-entry">
-        <h3>{job.company} · {job.role}</h3>
+        <h3>{job.company} · {job.role}{job.scope && ` (${job.scope})`}</h3>
         {job.companyContext && <p class="company-context"><em>{job.companyContext}</em></p>}
         <p class="job-meta">{job.location} · {job.dates}</p>
         <ul>
-          {job.bullets.map((bullet) => <li>{bulletText(bullet)}</li>)}
+          {job.bullets.map((bullet) => <li>{typeof bullet === 'string' ? bullet : bullet.text}</li>)}
         </ul>
         {job.stack && (
           <p class="stack-line"><strong>Stack:</strong> {job.stack.join(' · ')}</p>
@@ -57,7 +58,7 @@ const bulletText = (b) => (typeof b === 'string' ? b : b.text);
       <section class="project-entry">
         <h3>
           {project.url ? (
-            <a href={`https://${project.url}`} target="_blank" rel="noopener">{project.name}</a>
+            <a href={`https://${project.url}`} target="_blank" rel="noopener noreferrer">{project.name}</a>
           ) : (
             project.name
           )}
@@ -66,14 +67,24 @@ const bulletText = (b) => (typeof b === 'string' ? b : b.text);
         {project.stack && (
           <p class="stack-line"><strong>Stack:</strong> {project.stack.join(' · ')}</p>
         )}
+        {project.page && <p><a href={project.page}>Read the project write-up →</a></p>}
       </section>
     ))}
 
-    <h2>Education and Certifications</h2>
+    <h2>Certifications</h2>
     <ul class="cert-list">
-      {resume.educationAndCertifications.map((item) => (
+      {resume.certifications.map((item) => (
         <li>
-          <strong>{item.title}</strong> — {item.issuer} <span class="cert-status">({item.status})</span>
+          <strong>{item.title}</strong> — {item.issuer} <span class="cert-status">({item.date})</span>
+        </li>
+      ))}
+    </ul>
+
+    <h2>Education</h2>
+    <ul class="cert-list">
+      {resume.education.map((item) => (
+        <li>
+          <strong>{item.title}</strong> — {item.issuer} <span class="cert-status">({item.date})</span>
         </li>
       ))}
     </ul>
@@ -84,6 +95,6 @@ const bulletText = (b) => (typeof b === 'string' ? b : b.text);
     </ul>
 
     <h2>Languages</h2>
-    <p>{resume.languages.join(' and ')}.</p>
+    <p>{resume.languages}.</p>
   </article>
 </BaseLayout>

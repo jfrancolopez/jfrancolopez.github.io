@@ -43,8 +43,8 @@ const groups = [...new Set(posts.map(postGroup))]
     <span class="eyebrow">writing and notes</span>
     <h1>Notes from the systems work.</h1>
     <p class="lead">
-      This section should become proof of how I think: short, useful posts about infrastructure,
-      Kubernetes, Linux, networking, automation, mistakes, fixes, and tradeoffs.
+      Short, practical notes on infrastructure, Kubernetes, Linux, networking, and automation: what I
+      built, what broke, what I changed, and the tradeoffs along the way.
     </p>
   </header>
 
@@ -77,8 +77,9 @@ const groups = [...new Set(posts.map(postGroup))]
         </div>
       </details>
     )}
-  
-    <div class="all-post-list post-list" data-all-post-list>
+  </section>
+
+  <div class="all-post-list post-list" data-all-post-list>
   {posts.map(post => (
     <a
       class="post-card"

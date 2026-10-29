@@ -10,6 +10,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       A practical lab for testing infrastructure ideas before turning them into writing, scripts, or
       production patterns.
     </p>
+    <div class="actions">
+      <a class="button" href="https://github.com/jfrancolopez/Domum" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+    </div>
   </header>
 
   <article class="content">
@@ -19,7 +22,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       fix, document, and defend in an interview or production discussion.
     </p>
 
-    <h2>Areas I’m working through</h2>
+    <h2>Areas I'm working through</h2>
     <ul>
       <li>Kubernetes and container operations</li>
       <li>GitOps workflows and deployment automation</li>
@@ -28,10 +31,12 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       <li>Networking, storage, secrets, and monitoring patterns</li>
     </ul>
 
-    <h2>How this should show up on the site</h2>
-    <p>
-      Homelab work should support the career story without taking over the site. The best version is a
-      steady stream of short posts: what I built, what broke, what I changed, and what I learned.
-    </p>
+    <h2>Notes from the lab</h2>
+    <ul>
+      <li><a href="/blog/homelab/recovery-first-home-server/">Designing a Server for Recovery, Not Preservation</a></li>
+      <li><a href="/blog/homelab/backup-gated-container-updates/">How I Think About Container Updates on Stateful Services</a></li>
+      <li><a href="/blog/homelab/durable-data-and-disposable-media/">Two Disks, Durable Data and Disposable Media</a></li>
+      <li><a href="/blog/homelab/weekly-health-report-for-a-home-server/">What I Want From a Weekly Server Health Report</a></li>
+    </ul>
   </article>
 </BaseLayout>

@@ -84,7 +84,7 @@ Keep project pages structured around:
 
 ## Updating The Resume
 
-Edit:
+The site has one general resume, merged from the four-track resume package (IT Infrastructure & Operations, DevOps & Platform, Solutions Engineer, SRE). Edit:
 
 ```text
 src/data/resume.js
@@ -96,6 +96,15 @@ The web resume reads from that file automatically. Regenerate the downloadable P
 npm run resume:pdf
 ```
 
+The PDF is rendered with Chromium through Playwright, using the bundled Inter font so it looks the same on any machine. On a new machine, run `npx playwright install chromium` once first. The script stops with an error if the resume grows past two pages.
+
 Do not edit `tools/FrancoLopez-Resume.html` by hand; it is generated from `src/data/resume.js`.
 
 Run `npm run build` before pushing.
+
+## Security
+
+- `astro.config.mjs` turns on Astro's Content Security Policy. Every page gets a CSP `<meta>` tag with hashes for its scripts, so an injected script won't run. If you add a third-party script, style, image, or font host, add it to `security.csp.directives`.
+- The deploy workflow pins each GitHub Action to a commit SHA and gives each job only the permissions it needs.
+- Dependabot (`.github/dependabot.yml`) opens weekly pull requests for npm updates and monthly ones for GitHub Actions.
+- Run `npm audit` after upgrading dependencies.
