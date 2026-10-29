@@ -61,7 +61,7 @@ export const resume = {
         'Designed backup and disaster recovery for production platforms and company data, with automated restic backups of application data and cluster configuration and tested recovery procedures.',
         'Led IT for two new manufacturing facilities in 2025, in Palestine, TX and Battleboro, NC, from planning through go-live, delivering networking, site-to-site VPN, compute, security, and identity without disrupting existing sites.',
         'Led the migration of 200+ users from on-premises Active Directory to Microsoft Entra ID, implementing Azure AD Connect, MFA, and Conditional Access, modernizing Group Policy, and moving file shares to OneDrive.',
-        'Manage networking and security across all sites (Fortinet firewalls, site-to-site VPN, secure remote access), and deployed 130+ security cameras with a 200 TB storage server designed for 6-month retention.',
+        'Manage networking and security across all sites (Fortinet firewalls, site-to-site VPN, secure remote access), deployed 130+ security cameras, and custom-built a 200 TB storage server for 6-month video retention.',
         'Developed and support LS Academy, a Moodle learning management system (LMS) on Kubernetes for 500+ dealers, employees, and U.S. LS Group affiliates, deployed through Argo CD and GitHub Actions.',
         'Automated business processes with Microsoft 365, Power Apps, and Power Automate, including an internal ticketing system, and built an AI-assisted file organization tool that uses local language models to classify a shared, multi-department file server and flag duplicates, with human review before any change.',
         'Lead a team of 4 IT professionals, serve as the escalation point for production incidents, and present IT roadmaps, project status, and risks to division leadership. Received the 2025 CEO Award for Employee of the Year.',
@@ -144,7 +144,6 @@ export const resume = {
 
   certifications: [
     { title: 'Certified Kubernetes Administrator (CKA)', issuer: 'The Linux Foundation', date: 'in progress' },
-    { title: 'Implementing and Administering Cisco Solutions (CCNA)', issuer: 'Cisco', date: '2022' },
     { title: 'Microsoft Certified: Azure Fundamentals (AZ-900)', issuer: 'Microsoft', date: '2022' },
     { title: 'Engineering Cisco Meraki Solutions', issuer: 'Cisco Meraki', date: '2021' },
     { title: 'HPE SimpliVity 380 System Administration (VMware)', issuer: 'HPE', date: '2019' },
