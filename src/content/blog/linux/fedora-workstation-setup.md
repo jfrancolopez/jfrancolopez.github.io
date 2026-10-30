@@ -1,16 +1,17 @@
 +++
 title= 'Fedora 42 Workstation with Hyprland & VFIO'
 date= '2025-05-29'
-description= 'setup guide for a Linux workstation with Hyprland, KVM GPU passthrough, and Looking Glass.'
+description= 'A setup guide for a Linux workstation with Hyprland, KVM GPU passthrough, and Looking Glass.'
 tags = ['fedora', 'hyprland', 'kvm', 'virtualization', 'linux', 'vfio' ]
 
 +++
 
-  
-
-#  Fedora Workstation Setup 
-
 Here are some of my notes for my Fedora 42 workstation and VM gaming environment. Happy hacking!
+
+> **Hardware-specific and potentially destructive:** Do not copy the VFIO values below
+> verbatim. Confirm that the host uses a different GPU, replace every device ID with one
+> from your machine, back up the boot configuration, and keep live media or another
+> recovery path available before rebuilding the initramfs.
 <!--more-->
 - System updated
     
@@ -66,7 +67,7 @@ flatpak install flathub org.mozilla.Thunderbird
 
 Followed:
 
-[https://github.com/mylinuxforwork/dotfiles/wiki/Installation](https://github.com/mylinuxforwork/dotfiles/wiki/Installation)
+[https://ml4w.com/os/](https://ml4w.com/os/)
 
   
 
@@ -115,7 +116,7 @@ sudo nano /etc/modprobe.d/vfio.conf
 ```
 
 ```
-options vfio-pci ids=10de:2684,10de:22ba
+options vfio-pci ids=VENDOR_ID:DEVICE_ID,AUDIO_VENDOR_ID:AUDIO_DEVICE_ID
 softdep nvidia pre: vfio-pci
 ```
 
@@ -146,15 +147,18 @@ omit_drivers+=" nouveau "
 install_items+=" /etc/modprobe.d/vfio.conf /etc/modprobe.d/blacklist-nouveau.conf "
 ```
 
-5. Add kernel parameters:
+5. Back up the boot configuration, then append the VFIO parameters to the existing
+   `GRUB_CMDLINE_LINUX` value. Preserve all existing root, LUKS, resume, and other
+   machine-specific arguments. Use `intel_iommu=on` instead of `amd_iommu=on` on Intel.
     
 
 ```
+sudo cp --archive /etc/default/grub /etc/default/grub.before-vfio
 sudo nano /etc/default/grub
 ```
 
 ```
-GRUB_CMDLINE_LINUX="rhgb amd_iommu=on iommu=pt vfio-pci.ids=10de:2684,10de:22ba modprobe.blacklist=nouveau"
+amd_iommu=on iommu=pt vfio-pci.ids=VENDOR_ID:DEVICE_ID,AUDIO_VENDOR_ID:AUDIO_DEVICE_ID modprobe.blacklist=nouveau
 ```
 
 6. Apply changes:
@@ -163,13 +167,20 @@ GRUB_CMDLINE_LINUX="rhgb amd_iommu=on iommu=pt vfio-pci.ids=10de:2684,10de:22ba 
 ```
 sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 sudo dracut --force --kver $(uname -r)
+```
+
+Review the generated configuration before rebooting. If the selected GPU drives the host
+display, or the IDs are wrong, the next boot can lose graphics; restore the backed-up GRUB
+file and VFIO configuration from a console or live environment.
+
+```bash
 sudo reboot
 ```
 
 After reboot:
 
 ```
-lspci -nnk -d 10de:2684  # Should show vfio-pci in use
+lspci -nnk -d VENDOR_ID:DEVICE_ID  # Should show vfio-pci in use
 ```
 
 ---
@@ -203,7 +214,7 @@ bind = $mainMod, RETURN, exec, kitty
 bind = $mainMod, Q, killactive
 ```
 
-📝 You can add more by referencing the [Hyprland wiki](https://wiki.hyprland.org/Configuring/Keybinds/) for actions like workspace switching, tiling, moving windows, etc.
+You can add more by referencing the [Hyprland binds documentation](https://wiki.hypr.land/configuring/core/binds/) for actions like workspace switching, tiling, and moving windows.
 
 ---
 
@@ -259,7 +270,7 @@ exec-once = ~/.config/hypr/scripts/loadconfig.sh
 
 ## **🔍 Useful Links**
 
-- [Hyprland Dotfiles + Install](https://github.com/mylinuxforwork/dotfiles/wiki/Installation)
+- [ML4W Desktop Environment](https://ml4w.com/os/)
     
 - [Looking Glass Tutorial (YouTube)](https://www.youtube.com/watch?v=dxiX3E5B8bU)
     

@@ -41,7 +41,7 @@ Huge thanks to **ghost** for this comment and mapping reference:
 
 Download and install Synergy 1 from the official Symless archive:
 
-> <https://help.symless.com/hc/en-us/articles/33745162318225-Installing-Synergy-1-on-macOS>
+> <https://support.symless.com/hc/en-us/articles/33745162318225-Installing-Synergy-1-on-macOS>
 
 Basic server setup:
 

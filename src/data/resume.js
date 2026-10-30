@@ -1,7 +1,7 @@
 // Single source of truth for the general resume.
-// The web page (src/pages/resume/index.astro) and the downloadable PDF
-// (npm run resume:pdf → public/FrancoLopez-Resume.pdf) both render from this file,
-// so the site and the PDF always say the same thing.
+// The web page (src/pages/resume/index.astro) and downloadable PDF
+// (npm run resume:pdf → public/FrancoLopez-Resume.pdf) both render from this file.
+// PDF section controls below intentionally omit selected website-only details.
 //
 // Wording follows the October 2026 resume package (IT Infrastructure & Operations,
 // DevOps & Platform, Solutions Engineer, SRE), merged into one general version.
@@ -105,7 +105,7 @@ export const resume = {
   projects: [
     {
       name: 'Start Blue — Official Tractor Quoting Platform',
-      url: 'startblue.lstractorusa.com',
+      url: 'startblue.lstractorusa.app',
       page: '/projects/start-blue/',
       description:
         "LS Tractor's official tractor quoting tool for the U.S. and Canada, open to the public, with secure accounts for 350+ dealerships. React, Django, and PostgreSQL on a three-node Kubernetes cluster, delivered through GitHub Actions and Flux CD, with automated restic backups. In production for over two years without a major incident; 3,000+ quotes generated.",
@@ -143,7 +143,6 @@ export const resume = {
   ],
 
   certifications: [
-    { title: 'Certified Kubernetes Administrator (CKA)', issuer: 'The Linux Foundation', date: 'in progress' },
     { title: 'Microsoft Certified: Azure Fundamentals (AZ-900)', issuer: 'Microsoft', date: '2022' },
     { title: 'Engineering Cisco Meraki Solutions', issuer: 'Cisco Meraki', date: '2021' },
     { title: 'HPE SimpliVity 380 System Administration (VMware)', issuer: 'HPE', date: '2019' },

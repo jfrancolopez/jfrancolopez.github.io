@@ -9,13 +9,16 @@
 // Layout and typography follow the October 2026 resume package: Inter, navy accent,
 // grouped skills, company context lines, two pages.
 
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { PDFDocument } from 'pdf-lib';
 import { chromium } from 'playwright';
 import { resume } from '../src/data/resume.js';
 
 const htmlPath = fileURLToPath(new URL('./FrancoLopez-Resume.html', import.meta.url));
 const pdfPath = fileURLToPath(new URL('../public/FrancoLopez-Resume.pdf', import.meta.url));
+const tempHtmlPath = fileURLToPath(new URL(`./.FrancoLopez-Resume.${process.pid}.html`, import.meta.url));
+const tempPdfPath = `${pdfPath}.${process.pid}.tmp`;
 const MAX_PAGES = 2;
 
 // ---------- Helpers ----------
@@ -184,7 +187,7 @@ ${jobs}
 
 ${projects}
 
-<h2>Education &amp; Certifications</h2>
+<h2>Education, Certifications &amp; Training</h2>
 ${education}
 <ul class="edu certs">${certs}</ul>
 ${learning}
@@ -196,32 +199,40 @@ ${languages}
 
 // ---------- Render ----------
 
-writeFileSync(htmlPath, renderHtml(resume));
+const renderedHtml = renderHtml(resume);
+writeFileSync(tempHtmlPath, renderedHtml);
 
-const browser = await chromium.launch();
+let browser;
 try {
+  browser = await chromium.launch();
   const page = await browser.newPage();
-  await page.goto(pathToFileURL(htmlPath).href, { waitUntil: 'load' });
+  await page.goto(pathToFileURL(tempHtmlPath).href, { waitUntil: 'load' });
   await page.evaluate(() => document.fonts.ready);
   const missingFont = await page.evaluate(() => !document.fonts.check('9.6pt Inter'));
   if (missingFont) throw new Error('Inter did not load. Run npm install, then try again.');
 
   await page.pdf({
-    path: pdfPath,
+    path: tempPdfPath,
     format: 'Letter',
     printBackground: true,
+    tagged: true,
     margin: { top: '0.5in', right: '0.55in', bottom: '0.55in', left: '0.55in' },
     displayHeaderFooter: true,
     headerTemplate: '<span></span>',
     footerTemplate: `<div style="width:100%; padding: 0 0.55in; text-align:right; font-family: Helvetica, Arial, sans-serif; font-size:7.5pt; color:#8a94a3;">${escapeHtml(resume.name)} &nbsp;·&nbsp; <span class="pageNumber"></span> / <span class="totalPages"></span></div>`,
   });
-} finally {
-  await browser.close();
-}
 
-// Count pages without extra dependencies: each page object in the PDF has /Type /Page.
-const pages = (readFileSync(pdfPath, 'latin1').match(/\/Type\s*\/Page(?!s)/g) || []).length;
-if (pages > MAX_PAGES) {
-  throw new Error(`Resume PDF must fit on ${MAX_PAGES} pages, but generated ${pages}. Trim src/data/resume.js.`);
+  const pdf = await PDFDocument.load(readFileSync(tempPdfPath));
+  const pages = pdf.getPageCount();
+  if (pages < 1 || pages > MAX_PAGES) {
+    throw new Error(`Resume PDF must contain 1-${MAX_PAGES} pages, but validation found ${pages}.`);
+  }
+
+  writeFileSync(htmlPath, renderedHtml);
+  renameSync(tempPdfPath, pdfPath);
+  console.log(`PDF written to public/FrancoLopez-Resume.pdf (${pages} pages).`);
+} finally {
+  await browser?.close();
+  rmSync(tempHtmlPath, { force: true });
+  rmSync(tempPdfPath, { force: true });
 }
-console.log(`PDF written to public/FrancoLopez-Resume.pdf (${pages} pages).`);

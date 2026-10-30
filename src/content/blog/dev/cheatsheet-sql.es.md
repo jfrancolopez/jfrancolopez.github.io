@@ -12,7 +12,7 @@ Esta guia está basada en notas que he recopilado con el tiempo. Aplica para Pos
 
 ## SELECT - Consultas Básicas
 
-```SQL
+```sql
 -- Selecciona todo de una tabla
 SELECT * FROM Country;
 
@@ -37,7 +37,7 @@ SELECT DISTINCT Continent FROM Country;
 
 ## Filtrado con WHERE
 
-```SQL
+```sql
 -- Filtrar por múltiples condiciones
 SELECT Name, Continent, Population 
 FROM Country 
@@ -55,7 +55,7 @@ SELECT Name FROM Country WHERE Name LIKE '_a%' ORDER BY Name;
 
 ## INSERTAR Datos
 
-```SQL
+```sql
 -- Insertar datos en columnas específicas
 INSERT INTO customer (name, city, state) 
 VALUES ('Jimi', 'Renton', 'WA');
@@ -69,7 +69,7 @@ SELECT id, name, description FROM item;
 
 ## ACTUALIZAR y ELIMINAR
 
-```SQL
+```sql
 -- Actualizar campos específicos por ID
 UPDATE customer 
 SET address = '123 music ave', zip = '98056' 
@@ -83,7 +83,7 @@ DELETE FROM customer WHERE id = 5;
 
 ## Estructura de la Tabla
 
-```SQL
+```sql
 -- Eliminar tabla si existe
 DROP TABLE IF EXISTS test;
 
@@ -95,7 +95,7 @@ ALTER TABLE test ADD columna TEXT DEFAULT 'panda';
 
 ## Unir Tablas (JOINs)
 
-```SQL
+```sql
 -- Inner Join
 SELECT customers.name, orders.amount 
 FROM customers 
@@ -121,7 +121,7 @@ FULL OUTER JOIN orders ON customers.id = orders.customer_id;
 
 ## Agregación y Agrupación
 
-```SQL
+```sql
 -- Agrupar datos y contar registros
 SELECT Continent, COUNT(*) as total_paises 
 FROM Country 
@@ -137,7 +137,7 @@ GROUP BY Region;
 
 ## Otros Comandos Útiles
 
-```SQL
+```sql
 -- Encontrar máximos y mínimos
 SELECT MAX(Population), MIN(LifeExpectancy) FROM Country;
 

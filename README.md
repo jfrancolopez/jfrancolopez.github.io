@@ -71,7 +71,7 @@ To add a new project:
 
 1. Create `src/pages/projects/project-name.astro`.
 2. Add the project card to `src/pages/projects/index.astro`.
-3. Add it to the homepage project list in `src/pages/index.astro` if it is important enough for recruiters.
+3. Add it to `src/data/resume.js` if it belongs on the resume page.
 
 Keep project pages structured around:
 
@@ -100,11 +100,20 @@ The PDF is rendered with Chromium through Playwright, using the bundled Inter fo
 
 Do not edit `tools/FrancoLopez-Resume.html` by hand; it is generated from `src/data/resume.js`.
 
-Run `npm run build` before pushing.
+Run the complete production verification before pushing:
+
+```sh
+npm run verify
+```
+
+The deploy workflow regenerates the PDF before every production build, fails if the
+generated resume HTML was not committed, and runs browser checks for CSP enforcement,
+filters, theme persistence, syntax highlighting, language metadata, and mobile overflow.
 
 ## Security
 
-- `astro.config.mjs` turns on Astro's Content Security Policy. Every page gets a CSP `<meta>` tag with hashes for its scripts, so an injected script won't run. If you add a third-party script, style, image, or font host, add it to `security.csp.directives`.
+- `astro.config.mjs` turns on Astro's Content Security Policy. Every page gets a CSP `<meta>` tag before executable scripts, with hashes for the scripts and styles Astro renders. Markdown uses Prism classes so code highlighting does not require inline-style exceptions. If you add a third-party script, style, image, or font host, add it to `security.csp.directives`.
 - The deploy workflow pins each GitHub Action to a commit SHA and gives each job only the permissions it needs.
 - Dependabot (`.github/dependabot.yml`) opens weekly pull requests for npm updates and monthly ones for GitHub Actions.
+- Keep **Enforce HTTPS** enabled in the repository's GitHub Pages settings.
 - Run `npm audit` after upgrading dependencies.

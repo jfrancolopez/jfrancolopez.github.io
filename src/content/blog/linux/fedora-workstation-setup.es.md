@@ -1,16 +1,17 @@
 +++
-title= 'Fedora 42 Workstation con Hyprland & VFIO'
+title= 'Fedora 42 Workstation con Hyprland y VFIO'
 date= '2025-05-29'
-description= 'guia de installation para fedora Linux workstation con Hyprland, KVM GPU passthrough, y Looking Glass.'
+description= 'Guía de instalación de una estación de trabajo Fedora con Hyprland, KVM GPU passthrough y Looking Glass.'
 tags = ['fedora', 'hyprland', 'kvm', 'virtualization', 'linux', 'vfio' ]
 
 +++
 
-  
+Estas son algunas notas de mi estación de trabajo Fedora 42 con un entorno de videojuegos virtualizado con KVM.
 
-#  Configuracion de Fedora Workstation  
-
-Aqui algunas de mis notas de mi Fedora 42 con entorno de videojuegos virtualizados con KVM. 
+> **Configuración específica del equipo y potencialmente destructiva:** No copies los
+> valores VFIO literalmente. Confirma que el host usa otra GPU, reemplaza cada ID con los
+> de tu equipo, respalda la configuración de arranque y prepara un medio de recuperación
+> antes de reconstruir el initramfs.
 <!--more-->
 
 - Actualizacion del sistema
@@ -67,7 +68,7 @@ flatpak install flathub org.mozilla.Thunderbird
 
 seguido por:
 
-[https://github.com/mylinuxforwork/dotfiles/wiki/Installation](https://github.com/mylinuxforwork/dotfiles/wiki/Installation)
+[https://ml4w.com/os/](https://ml4w.com/os/)
 
   
 
@@ -116,7 +117,7 @@ sudo nano /etc/modprobe.d/vfio.conf
 ```
 
 ```
-options vfio-pci ids=10de:2684,10de:22ba
+options vfio-pci ids=VENDOR_ID:DEVICE_ID,AUDIO_VENDOR_ID:AUDIO_DEVICE_ID
 softdep nvidia pre: vfio-pci
 ```
 
@@ -147,15 +148,19 @@ omit_drivers+=" nouveau "
 install_items+=" /etc/modprobe.d/vfio.conf /etc/modprobe.d/blacklist-nouveau.conf "
 ```
 
-5. Agregar parametros de kernel:
+5. Respalda la configuración y agrega los parámetros VFIO al valor existente de
+   `GRUB_CMDLINE_LINUX`. Conserva los argumentos actuales de root, LUKS, resume y los
+   demás valores específicos del equipo. En Intel usa `intel_iommu=on` en lugar de
+   `amd_iommu=on`.
     
 
 ```
+sudo cp --archive /etc/default/grub /etc/default/grub.before-vfio
 sudo nano /etc/default/grub
 ```
 
 ```
-GRUB_CMDLINE_LINUX="rhgb amd_iommu=on iommu=pt vfio-pci.ids=10de:2684,10de:22ba modprobe.blacklist=nouveau"
+amd_iommu=on iommu=pt vfio-pci.ids=VENDOR_ID:DEVICE_ID,AUDIO_VENDOR_ID:AUDIO_DEVICE_ID modprobe.blacklist=nouveau
 ```
 
 6. Aplicar cambios:
@@ -164,13 +169,20 @@ GRUB_CMDLINE_LINUX="rhgb amd_iommu=on iommu=pt vfio-pci.ids=10de:2684,10de:22ba 
 ```
 sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 sudo dracut --force --kver $(uname -r)
+```
+
+Revisa la configuración generada antes de reiniciar. Si la GPU seleccionada controla la
+pantalla del host o los IDs son incorrectos, el próximo arranque puede quedarse sin video;
+restaura el respaldo de GRUB y la configuración VFIO desde una consola o un entorno live.
+
+```bash
 sudo reboot
 ```
 
 Despues de reinicio:
 
 ```
-lspci -nnk -d 10de:2684  # Should show vfio-pci in use
+lspci -nnk -d VENDOR_ID:DEVICE_ID  # Debe mostrar vfio-pci en uso
 ```
 
 ---
@@ -204,7 +216,7 @@ bind = $mainMod, RETURN, exec, kitty
 bind = $mainMod, Q, killactive
 ```
 
-📝  Puedes agregar mas , haciendo referencia a  [Hyprland wiki](https://wiki.hyprland.org/Configuring/Keybinds/) para ejecutar mas acciones.
+Puedes agregar más acciones consultando la [documentación de atajos de Hyprland](https://wiki.hypr.land/configuring/core/binds/).
 
 ---
 
@@ -259,11 +271,10 @@ exec-once = ~/.config/hypr/scripts/loadconfig.sh
 ---
 
 ## Máquina Virtual Windows (XML QEMU)
-Para crear tu VM con passthrough de GPU, usa el siguiente XML como plantilla. Guarda el XML como WindowsX.xml y luego impórtalo:
-```bash
-virsh define guindousdiez.xml
-virsh start GuindousDiez
-```
+Este es un fragmento ilustrativo de aquella VM, no una definición completa lista para
+importar. Crea primero una VM con `virt-manager`, exporta su XML y adapta únicamente las
+secciones necesarias. Revisa todos los dispositivos y rutas antes de definir o iniciar el
+dominio; una dirección PCI incorrecta puede desconectar hardware que usa el host.
 
 Incluye:
 
@@ -281,7 +292,6 @@ XML:
 ```xml
 <domain xmlns:qemu="http://libvirt.org/schemas/domain/qemu/1.0" type="kvm">
   <name>GuindousDiez</name> <!-- Nombre personalizado de la VM -->
-  <uuid>8e5f6520-a6e2-4717-9383-c5f26b1c3c79</uuid> <!-- UUID único -->
 
   <metadata>
     <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
@@ -343,11 +353,11 @@ XML:
 
   <clock offset="localtime">...</clock>
 
-  <!-- Disco de la VM: asegúrate que /dev/sda sea el disco dedicado -->
+  <!-- Usa una imagen de VM por defecto; no expongas un disco del host como /dev/sda -->
   <devices>
-    <disk type="block" device="disk">
-      <driver name="qemu" type="raw" cache="none" io="native" discard="unmap"/>
-      <source dev="/dev/sda"/>
+    <disk type="file" device="disk">
+      <driver name="qemu" type="qcow2" cache="none"/>
+      <source file="/var/lib/libvirt/images/WindowsX.qcow2"/>
       <target dev="sda" bus="sata"/>
     </disk>
 
@@ -371,23 +381,31 @@ XML:
       </source>
     </hostdev>
 
-    <!-- Looking Glass Shared Memory -->
-    <qemu:commandline>
-      <qemu:arg value="-object"/>
-      <qemu:arg value="memory-backend-file,id=looking-glass,mem-path=/dev/kvmfr0,size=128M,share=yes"/>
-      <qemu:arg value="-device"/>
-      <qemu:arg value="ivshmem-plain,id=shmem0,memdev=looking-glass"/>
-    </qemu:commandline>
   </devices>
+
+  <!-- Looking Glass Shared Memory -->
+  <qemu:commandline>
+    <qemu:arg value="-object"/>
+    <qemu:arg value="memory-backend-file,id=looking-glass,mem-path=/dev/kvmfr0,size=128M,share=yes"/>
+    <qemu:arg value="-device"/>
+    <qemu:arg value="ivshmem-plain,id=shmem0,memdev=looking-glass"/>
+  </qemu:commandline>
 </domain>
 ```
+
+Si necesitas passthrough de un disco físico, usa una ruta estable bajo `/dev/disk/by-id/`,
+confirma varias veces que no sea el disco del host, desmonta todas sus particiones y evita
+que el host las monte automáticamente. El disco debe pertenecer exclusivamente a la VM
+mientras esta se ejecuta; nunca permitas escrituras simultáneas del host y el invitado.
+Mantén un respaldo verificado, valida el XML y revisa `virsh domblklist GuindousDiez` antes
+de iniciar la VM.
 
 
 
 ---
 ## **🔍 Enlaces utiles**
 
-- [Hyprland Dotfiles + Install](https://github.com/mylinuxforwork/dotfiles/wiki/Installation)
+- [Entorno de escritorio ML4W](https://ml4w.com/os/)
     
 - [Looking Glass Tutorial (YouTube)](https://www.youtube.com/watch?v=dxiX3E5B8bU)
     
@@ -399,9 +417,4 @@ XML:
 
 
 — Franco
-
-
-
-
-
 

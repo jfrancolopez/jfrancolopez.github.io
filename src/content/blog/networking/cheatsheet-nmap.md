@@ -6,6 +6,10 @@ tags = ['nmap', 'networking', 'cheatsheet']
 +++
 
 A practical list of commonly used Nmap scan profiles. Use these to discover hosts, detect services, find open ports, trace routes, and identify firewall rules.
+
+Only scan systems you own or have explicit permission to test. Authorization must cover
+every system involved, including an idle-scan "zombie." Review each NSE script before use;
+some scripts are intrusive or disruptive even when the scan timing is slow.
 <!--more-->
 
 ---
@@ -16,10 +20,10 @@ A practical list of commonly used Nmap scan profiles. Use these to discover host
 # List network interfaces on the scanning host
 nmap --iflist
 
-# Ping scan to find live hosts (ICMP only)
+# Host discovery without a port scan; probes vary by network and privileges
 nmap -sn 192.168.1.0/24
 
-# Ping through firewalls using SYN and ACK instead of ICMP
+# Probe with TCP SYN and ACK discovery when ICMP is blocked
 nmap -PS -PA 192.168.1.1
 
 # Discover hosts with ARP (LAN only)
@@ -34,7 +38,7 @@ nmap -PR 192.168.1.0/24
 # Scan for open ports (default 1000 ports)
 nmap TARGET
 
-# Fast scan of top 300 common ports
+# Fast scan of the top 100 common ports
 nmap -F TARGET
 
 # Full TCP port scan (all 65535 ports)
@@ -43,22 +47,22 @@ nmap -p- TARGET
 # Full UDP port scan
 nmap -sU -p- TARGET
 
-# TCP FIN scan (stealth, may bypass firewalls)
+# TCP FIN scan (behavior varies; it remains detectable)
 nmap -sF TARGET
 
 # TCP ACK scan (check for firewall presence)
 nmap -sA TARGET
 
-# Xmas scan (another stealthy technique)
+# Xmas scan (nonstandard flags; it remains detectable)
 nmap -sX TARGET
 
 # Null scan (no flags set)
 nmap -sN TARGET
 
-# Idle scan (completely stealthy)
+# Idle scan (requires authorization for both the zombie and target)
 nmap -sI ZOMBIE_IP TARGET
 
-# Slow scan to reduce detection by intrusion systems
+# Slower timing; this does not make a scan undetectable
 nmap -T1 TARGET
 ```
 
@@ -73,7 +77,7 @@ nmap -sV TARGET
 # Detect OS and traceroute
 nmap -O --traceroute TARGET
 
-# Web-safe OS scan (uses HTTP/HTTPS ports only)
+# Limit OS probes to web ports; this still requires authorization
 nmap -O -p 80,443 TARGET
 
 # Aggressive fingerprinting
@@ -91,8 +95,8 @@ nmap -sC TARGET
 # Run specific script
 nmap --script=http-title TARGET
 
-# Run all available scripts
-nmap --script=all TARGET
+# Run the reviewed "safe" category; inspect its current script list first
+nmap --script=safe TARGET
 
 # Run with vulscan
 nmap -sV --script=vulscan/vulscan.nse TARGET
@@ -138,7 +142,7 @@ nmap -oA scan_result TARGET
 ```bash
 nmap_open_ports:        scan for open ports on target
 nmap_list_interfaces:   list all interfaces (nmap --iflist)
-nmap_slow:              slow scan, stealthier (nmap -T1)
+nmap_slow:              slower timing, still detectable (nmap -T1)
 nmap_fin:               TCP FIN scan (nmap -sF)
 nmap_full:              full aggressive scan (nmap -p- -A)
 nmap_check_for_firewall: TCP ACK scan (nmap -sA)
@@ -149,13 +153,15 @@ nmap_check_for_vulns:   run vulscan script (nmap -sV --script=vulscan)
 nmap_full_udp:          scan all ports with UDP (nmap -sU -p-)
 nmap_traceroute:        enable traceroute (nmap --traceroute)
 nmap_full_with_scripts: full scan with scripts (nmap -p- -A -sC)
-nmap_web_safe_osscan:   OS detection using web ports (nmap -O -p 80,443)
-nmap_ping_scan:         ICMP ping scan (nmap -sn)
+nmap_web_ports_osscan:  OS detection limited to web ports (nmap -O -p 80,443)
+nmap_ping_scan:         host discovery without a port scan (nmap -sn)
 ```
 
 ---
 
-Remember, some scans (e.g., -A, --script, -sU, -p-) are noisy and may trigger firewalls or alert systems.
+Remember, scans such as `-A`, `--script`, `-sU`, and `-p-` can generate heavy traffic,
+trigger defenses, or disrupt fragile services. Avoid `--script=all`; choose explicit,
+reviewed scripts and test them in a lab before using them on an authorized production target.
 
 
 — Franco

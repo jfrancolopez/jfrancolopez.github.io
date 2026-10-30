@@ -10,11 +10,14 @@ Astro.csp?.insertScriptHash(`sha256-${createHash('sha256').update(themeInit).dig
 const {
   title = 'Franco Lopez',
   description = 'Franco Lopez: platform and DevOps engineer and IT infrastructure leader. Kubernetes, CI/CD, Azure, networking, and manufacturing IT.',
+  lang = 'en',
 } = Astro.props;
+
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
 ---
 
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang={lang} data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -23,14 +26,15 @@ const {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={Astro.url} />
+    <meta property="og:url" content={canonicalUrl} />
+    <link rel="canonical" href={canonicalUrl} />
     <link rel="icon" href="/favicon.ico" />
     <title>{title}</title>
-    <script is:inline set:html={themeInit}></script>
   </head>
   <body>
+    <script is:inline set:html={themeInit}></script>
     <div class="site-shell">
-      <header class="site-header">
+      <header class="site-header" lang="en">
         <nav class="nav" aria-label="Main navigation">
           <a class="brand" href="/">
             <strong>Franco Lopez</strong>
@@ -38,6 +42,7 @@ const {
           </a>
           <div class="nav-links">
             <a href="/blog/">Notes</a>
+            <a href="/projects/">Projects</a>
             <a href="/resume/">Resume</a>
             <a href="/contact/">Contact</a>
             <button class="theme-toggle" type="button" aria-label="Toggle dark mode" data-theme-toggle>◐</button>
@@ -47,7 +52,7 @@ const {
       <main class="main">
         <slot />
       </main>
-      <footer class="site-footer">
+      <footer class="site-footer" lang="en">
         <div class="footer-inner">
           <span>Raleigh-Durham, NC</span>
           <span>English / Spanish · Open to remote or hybrid roles</span>
@@ -56,11 +61,17 @@ const {
     </div>
     <script>
       const toggle = document.querySelector('[data-theme-toggle]');
+      const setToggleLabel = () => {
+        const current = document.documentElement.dataset.theme;
+        toggle?.setAttribute('aria-label', `Switch to ${current === 'dark' ? 'light' : 'dark'} mode`);
+      };
+
+      setToggleLabel();
       toggle?.addEventListener('click', () => {
         const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
         document.documentElement.dataset.theme = next;
         try { localStorage.setItem('theme', next); } catch {}
-        toggle.setAttribute('aria-label', `Switch to ${next === 'dark' ? 'light' : 'dark'} mode`);
+        setToggleLabel();
       });
     </script>
   </body>

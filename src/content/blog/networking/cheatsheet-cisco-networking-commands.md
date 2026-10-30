@@ -1,30 +1,30 @@
 +++
-title= 'Cheatsheet: Cisco Networking Commands '
+title= 'Cheatsheet: Cisco Networking Commands'
 date= '2025-05-20'
-description= 'collection of useful Cisco CLI commands for secure network administration'
+description= 'A collection of useful Cisco IOS CLI commands for secure network administration.'
 tags = ['cisco', 'networking', 'cheatsheet']
 +++
 
-This notes includes some of my most useful Cisco IOS CLI commands I’ve used for managing networks in both lab and production environments. It covers basic access protection and VLAN isolation to advanced ACLs, NAT, and LACP configuration.
+These notes include Cisco IOS CLI commands I have used for managing lab and production networks. They cover secure administrative access, VLAN isolation, ACLs, NAT, and LACP configuration.
+
+The addresses are examples and must be adapted to the local design. Keep console access or
+an existing administrative session open while changing VTY ACLs so a mistake can be reversed.
 <!--more-->
 
 ---
 
-## Console Access Protection
+## Verify Administrative Access
+
+Connect from an administrative workstation with SSH rather than Telnet:
+
+```bash
+ssh admin@DEVICE_IP
+```
+
+Then display the IOS version and hardware information:
 
 ```
-# Connect to the device via Telnet
- telnet 192.x.x.x.x
-
-# Display IOS version and hardware info
- show version
-
-# Set a password for remote (VTY) access
- enable
- configure terminal
- line vty 0 4
- password YOUR_PASSWORD  # Set your desired password
- login                    # Require password authentication
+show version
 ```
 
 ---
@@ -32,48 +32,61 @@ This notes includes some of my most useful Cisco IOS CLI commands I’ve used fo
 ## Isolate Management Traffic (VLAN)
 
 ```
- enable
- configure terminal
- vlan 10                            # Create VLAN 10
- name MANAGEMENT                    # Name the VLAN for clarity
- end
- show vlan                          # Confirm VLAN creation
-
- interface vlan 10                  # Enter VLAN interface config
- ip address 192.168.10.1 255.255.255.0  # Assign IP for management
- no shutdown                        # Enable the interface
- end
+enable
+configure terminal
+vlan 10
+ name MANAGEMENT
+exit
+interface vlan 10
+ ip address 192.168.10.1 255.255.255.0
+ no shutdown
+exit
+end
+show vlan brief
+show ip interface brief
 ```
 
 ---
 
 ## Enable SSH Access
 
+Run `show running-config | section line vty` first and apply the policy to every VTY range
+the device exposes. The common range below is `0 15`; adjust it for the platform.
+
 ```
- enable
- configure terminal
- hostname SWITCH01                    # Set device hostname
- ip domain-name yourdomain.com        # Define domain name
- crypto key generate rsa              # Generate RSA keys (choose 2048 bits)
- ip ssh version 2                     # Use SSH v2 for better security
- line vty 0 4
- transport input ssh                 # Allow SSH access only
- login local                         # Use local usernames for login
+enable
+configure terminal
+hostname SWITCH01
+ip domain-name yourdomain.com
+username admin privilege 15 secret YOUR_STRONG_UNIQUE_SECRET
+crypto key generate rsa modulus 2048
+ip ssh version 2
+line vty 0 15
+ transport input ssh
+ login local
+exit
+end
 ```
 
 ---
 
 ## Restrict Access via ACL
 
-```
- enable
- configure terminal
- ip access-list standard 50                 # Create standard ACL 50
- permit 192.168.10.0 0.0.0.255              # Allow internal subnet
- deny any                                   # Deny everything else
+Add and verify the current management source before applying the ACL to VTY lines. Applying
+the wrong ACL can immediately lock out remote administration.
 
- line vty 0 4
- access-class 50 in                        # Apply ACL to VTY lines
+```
+enable
+configure terminal
+ip access-list standard 50
+ permit 192.168.10.0 0.0.0.255
+ deny any
+exit
+do show access-lists 50
+line vty 0 15
+ access-class 50 in
+exit
+end
 ```
 
 ---
@@ -81,11 +94,13 @@ This notes includes some of my most useful Cisco IOS CLI commands I’ve used fo
 ## User Privileges
 
 ```
- enable
- configure terminal
- username admin privilege 15 secret STRONG_PASSWORD  # Create privileged user
- line vty 0 4
- login local                                           # Use local accounts for VTY login
+enable
+configure terminal
+username admin privilege 15 secret STRONG_PASSWORD
+line vty 0 15
+ login local
+exit
+end
 ```
 
 ---
@@ -93,32 +108,44 @@ This notes includes some of my most useful Cisco IOS CLI commands I’ve used fo
 ## Block Unauthorized Physical Connections
 
 ```
- enable
- configure terminal
- interface range fastEthernet 0/1-24            # Select range of access ports
- switchport mode access                         # Set ports to access mode
- switchport port-security                       # Enable port security
- switchport port-security maximum 2             # Allow max 2 MAC addresses
- switchport port-security violation shutdown    # Shutdown port on violation
+enable
+configure terminal
+interface range fastEthernet 0/1-24
+ switchport mode access
+ switchport port-security
+ switchport port-security maximum 2
+ switchport port-security violation shutdown
+exit
+end
 ```
 
 ---
 
 ## Add OSPF Routes (Router)
 
+On the main router:
+
 ```
-# On the main router
- enable
- configure terminal
- router ospf 3
- network 3.3.3.0 0.0.0.15 area 5               # Define network and area
+enable
+configure terminal
+router ospf 3
+ network 10.3.3.0 0.0.0.15 area 5
+exit
+end
+show ip route
+```
 
-# On the new router
- router ospf 1
- network 3.3.3.0 0.0.0.15 area 5
- network 192.168.56.0 0.0.0.255 area 5         # Add second interface
+On the new router:
 
- show ip route                                 # View OSPF learned routes
+```
+enable
+configure terminal
+router ospf 1
+ network 10.3.3.0 0.0.0.15 area 5
+ network 192.168.56.0 0.0.0.255 area 5
+exit
+end
+show ip route
 ```
 
 ---
@@ -126,13 +153,13 @@ This notes includes some of my most useful Cisco IOS CLI commands I’ve used fo
 ## Centralized Syslog
 
 ```
- enable
- configure terminal
- service timestamps log datetime msec          # Add time to logs
- service timestamps debug datetime msec
- logging 192.x.x.x                             # Set syslog server IP
- logging trap debugging                        # Log debug-level messages
- end
+enable
+configure terminal
+service timestamps log datetime msec
+service timestamps debug datetime msec
+logging 192.168.10.50
+logging trap informational
+end
 ```
 
 ---
@@ -142,30 +169,39 @@ This notes includes some of my most useful Cisco IOS CLI commands I’ve used fo
 ### Standard ACL
 
 ```
- enable
- configure terminal
- ip access-list standard 10
- deny host 192.168.2.80              # Block specific IP
- permit any                          # Allow all others
- end
+enable
+configure terminal
+ip access-list standard 10
+ deny host 192.168.2.80
+ permit any
+exit
+end
 ```
 
 ### Apply to an interface
 
 ```
- interface gi1/0/x
- ip access-group 10 out              # Apply ACL to outgoing traffic
+enable
+configure terminal
+interface gi1/0/2
+ ip access-group 10 out
+exit
+end
 ```
 
 ### Extended ACL Example (block FTP)
 
 ```
- ip access-list extended 111
- deny tcp host 192.0.2.10 host 192.0.3.100 eq ftp  # Block FTP to specific host
- permit ip any any                                # Allow everything else
-
- interface gi1/0/2
- ip access-group 111 out                          # Apply extended ACL
+enable
+configure terminal
+ip access-list extended 111
+ deny tcp host 192.168.2.10 host 198.51.100.100 eq ftp
+ permit ip any any
+exit
+interface gi1/0/2
+ ip access-group 111 out
+exit
+end
 ```
 
 ---
@@ -175,58 +211,71 @@ This notes includes some of my most useful Cisco IOS CLI commands I’ve used fo
 ### Static NAT
 
 ```
- enable
- configure terminal
- ip nat inside source static 192.168.2.34 8.8.8.34  # Map private IP to public IP
- interface gi0/0
+enable
+configure terminal
+ip nat inside source static 192.168.2.34 203.0.113.34
+interface gi0/0
  ip nat inside
- interface gi0/1
+exit
+interface gi0/1
  ip nat outside
+exit
+end
 ```
 
 ### Dynamic NAT
 
 ```
- ip access-list standard 80
- permit 192.0.2.0 0.0.0.255                       # Define internal subnet
-
- ip nat pool POOL-NAT 8.8.8.10 8.8.8.11 netmask 255.255.255.0
- ip nat inside source list 80 pool POOL-NAT       # Use pool for NAT
-
- interface gi0/0
+enable
+configure terminal
+ip access-list standard 80
+ permit 192.168.2.0 0.0.0.255
+exit
+ip nat pool POOL-NAT 203.0.113.10 203.0.113.11 netmask 255.255.255.0
+ip nat inside source list 80 pool POOL-NAT
+interface gi0/0
  ip nat inside
- interface gi0/1
+exit
+interface gi0/1
  ip nat outside
+exit
+end
 ```
 
-# Verify translations
+### Verify translations
 
-netstat # On PC  
-show ip nat translations # On router
+```
+show ip nat translations
+show ip nat statistics
+```
+
+Generate permitted test traffic from an inside client, then repeat the router checks.
 
 ---
 
 ## LACP (Link Aggregation Control Protocol)
 
 ```
- configure terminal
- interface port-channel 1
+enable
+configure terminal
+interface range GigabitEthernet1/0/20-23
  switchport mode trunk
  switchport trunk native vlan 36
  switchport trunk allowed vlan 36,39,136
-
-# Add member interfaces
- interface range gi1/0/20 - 23
+ channel-group 1 mode active
+exit
+interface port-channel 1
  switchport mode trunk
  switchport trunk native vlan 36
  switchport trunk allowed vlan 36,39,136
- channel-group 1 mode active                # Enable LACP active mode
+exit
+end
 ```
 
 ### Verify LACP status
 
 ```
- show etherchannel summary  # Check LACP bundling status
+show etherchannel summary
 ```
 
 You should see ports bundled into Po1(SU) with the appropriate flags.
@@ -236,20 +285,21 @@ You should see ports bundled into Po1(SU) with the appropriate flags.
 ## Additional Useful Commands
 
 ```
-show running-config        # View active config in RAM
-show startup-config        # View config stored in NVRAM
-show interfaces status     # Show link status and VLAN assignments
-show mac address-table     # Display MAC-to-port mapping
-show ip interface brief    # Summarized interface status
-show vlan brief            # Quick VLAN overview
-show cdp neighbors detail  # View connected Cisco devices
-copy running-config startup-config  # Save current config
-reload                     # Reboot the device (confirm required)
+show running-config
+show startup-config
+show interfaces status
+show mac address-table
+show ip interface brief
+show vlan brief
+show cdp neighbors detail
+copy running-config startup-config
 ```
+
+`reload` is intentionally omitted from the generic block because it interrupts service and
+must be scheduled and confirmed against the device's change plan.
 
 ---
 
 These notes are built from real-world experience managing branch networks, lab setups, and production environments. Suggestions or improvements are always welcome.
 
 -Franco
-

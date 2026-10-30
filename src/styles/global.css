@@ -62,6 +62,10 @@ textarea {
   font: inherit;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 .site-shell {
   min-height: 100vh;
 }
@@ -604,6 +608,78 @@ p {
   max-width: 920px;
 }
 
+.content code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.9em;
+}
+
+.content :not(pre) > code {
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--panel-strong);
+  padding: 0.12rem 0.3rem;
+}
+
+.content pre {
+  max-width: 100%;
+  margin: 0;
+  overflow-x: auto;
+  border: 1px solid color-mix(in srgb, var(--line) 55%, transparent);
+  border-radius: 9px;
+  background: var(--code);
+  color: var(--code-text);
+  padding: 1rem;
+  line-height: 1.55;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #8b949e;
+}
+
+.token.punctuation,
+.token.operator {
+  color: #c9d1d9;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol {
+  color: #79c0ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: #a5d6ff;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+  color: #d2a8ff;
+}
+
+.token.keyword,
+.token.deleted {
+  color: #ff7b72;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+  color: #ffa657;
+}
+
 .content h2 {
   margin-top: 1.4rem;
   font-size: 1.65rem;
@@ -720,7 +796,8 @@ p {
   text-decoration: none;
 }
 
-.post-card span {
+.post-card span,
+.post-card time {
   color: var(--muted);
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   font-size: 0.78rem;

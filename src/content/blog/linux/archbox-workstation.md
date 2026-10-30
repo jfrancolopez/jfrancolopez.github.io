@@ -5,6 +5,11 @@ description= 'Using AMD iGPU for Host + NVIDIA RTX 4090 for VM (VFIO)'
 tags = ['linux', 'arch', 'vfio', 'hyprland']
 +++
 
+> **Archived setup note (October 2026):** This is a machine-specific record from 2025.
+> Package names, device IDs, boot tooling, and third-party installers can change. Back up
+> your data, use the current upstream documentation, and review scripts locally before
+> running them.
+
 My notes and reference for using **AMD iGPU for Host** + **NVIDIA RTX 4090 for VM (VFIO)** on Arch Linux.
 
 ---
@@ -45,9 +50,9 @@ ls -l /dev/disk/by-id/
 
 ### Optional: Chris Titus Arch Install
 
-```bash
-curl -fssl christitus.com/linux | sh
-```
+Do not pipe a remote installer directly into a shell. Download a pinned release or clone
+the [Chris Titus Tech utility](https://github.com/ChrisTitusTech/linutil), inspect it
+locally, and follow its current installation instructions.
 
 Choose:  
 - `System Setup -> Arch Linux -> Arch Server Setup`  
@@ -130,7 +135,7 @@ timeout 10
 Remove an old/duplicate entry:
 
 ```bash
-sudo bootctl remove <entry-id>
+sudo bootctl unlink ENTRY_ID
 ```
 ---
 ## Installing ML4W Dotfiles with Flatpak
@@ -139,7 +144,7 @@ As part of my Hyprland setup, I used the **ML4W Dotfiles Installer** to quickly 
 Below are the commands and the steps I followed.
 
 ```bash
-flatpak install com.ml4w.dotfilesinstaller
+flatpak install flathub com.ml4w.dotfilesinstaller
 ```
 
 ---
@@ -147,16 +152,18 @@ flatpak install com.ml4w.dotfilesinstaller
 ### Installation Steps
 
 1. Open **Firefox** and visit:  
-   [https://mylinuxforwork.github.io/dotfiles](https://mylinuxforwork.github.io/dotfiles)
+   [https://ml4w.com/os/](https://ml4w.com/os/)
 
 2. Run the Flatpak installer:
    ```bash
    flatpak run com.ml4w.dotfilesinstaller
    ```
 
-3. From the website, copy the script for either the **Stable** or **Rolling** release.
+3. If the website generates a shell script, save it to a local file instead of piping or
+   pasting it directly into a shell. Pin the referenced release where possible and inspect
+   the script and every download it invokes.
 
-4. Paste the script into a terminal and execute it.
+4. Run the reviewed local copy only after you understand the changes it will make.
 
 5. Once the script finishes, return to the installer and click **Next**.
 
@@ -177,7 +184,8 @@ Check installed NVIDIA packages:
 pacman -Q | grep -i nvidia
 ```
 
-Remove them if present (adjust to your system):
+Remove them only after confirming the NVIDIA GPU does not drive the host display. This can
+break the graphical boot, so keep a fallback kernel and console or live-media access ready:
 
 ```bash
 sudo pacman -Rns nvidia-utils nvidia-lts linux-firmware-nvidia
@@ -193,7 +201,7 @@ lspci -nnk | grep -A3 NVIDIA
 ```
 
 ### Blacklist NVIDIA
-```conf
+```ini
 # /etc/modprobe.d/blacklist-nvidia.conf
 blacklist nouveau
 blacklist nvidia
@@ -202,15 +210,22 @@ blacklist nvidia_modeset
 ```
 
 ### Bind to VFIO
-```conf
+Replace these placeholders with every function of the passthrough GPU. Never bind the GPU
+that drives the host display, and keep a fallback kernel or live environment available.
+
+```ini
 # /etc/modprobe.d/vfio.conf
-options vfio-pci ids=10de:2684,10de:22ba
+options vfio-pci ids=VENDOR_ID:DEVICE_ID,AUDIO_VENDOR_ID:AUDIO_DEVICE_ID
 ```
 
-Update initramfs and bootloader:
+Add `vfio_pci vfio vfio_iommu_type1` to the existing `MODULES=(...)` array in
+`/etc/mkinitcpio.conf`; preserve any modules already listed. This loads VFIO early enough to
+claim the device before a host graphics driver.
+
+Rebuild the initramfs, then verify the boot entries:
 ```bash
 sudo mkinitcpio -P
-sudo grub-mkconfig -o /boot/grub/grub.cfg
+bootctl list
 ```
 
 ---
@@ -227,17 +242,10 @@ lspci -nnk | grep -A3 NVIDIA
 
 ## Desktop Setup
 
-Install Hyprland (JaKooLit fork):
-
-```bash
-sh <(curl -L https://raw.githubusercontent.com/JaKooLit/Arch-Hyprland/main/auto-install.sh)
-```
-
-Or ML4W dotfiles:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/mylinuxforwork/dotfiles/main/hyprland-dotfiles-stable.dotinst | sh
-```
+For a managed setup, use the current upstream instructions for
+[Arch-Hyprland](https://github.com/LinuxBeginnings/Arch-Hyprland) or the
+[ML4W dotfiles](https://ml4w.com/os/). Clone or download a pinned
+release and inspect the scripts locally rather than piping remote content into a shell.
 
 ---
 

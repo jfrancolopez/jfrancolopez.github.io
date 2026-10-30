@@ -6,12 +6,17 @@ tags = ['kubernetes', 'talos', 'cheatsheet', 'devops', 'homelab']
 +++
 
 Este es un resumen de referencia rápida que preparé para ayudarme a gestionar mis clústeres de Kubernetes con Talos Linux, tanto en casa como en el trabajo. Como `kubectl` es mi herramienta principal para las operaciones diarias, espero que esta guía también sea útil para otros que estén trabajando con configuraciones similares.
+
+Antes de aplicar o eliminar recursos, verifica el contexto y namespace actuales. Los valores
+de un Secret solo están codificados en base64; no compartas su salida en tickets, logs o
+terminales compartidas.
 <!--more-->
 
 ## Información del Cluster
 
 ```bash
 kubectl cluster-info          # Muestra información del endpoint del clúster
+kubectl config current-context # Confirma el clúster objetivo
 kubectl get nodes             # Lista todos los nodos
 kubectl describe node <name>  # Información detallada de un nodo específico
 ```
@@ -40,18 +45,21 @@ kubectl describe svc <name>         # Detalles del servicio
 
 ## Aplicar y Eliminar YAML
 
+Revisa el diff primero y especifica el namespace. Los comandos de eliminación actúan de inmediato.
+
 ```bash
-kubectl apply -f <file.yaml>    # Aplica una configuración
-kubectl delete -f <file.yaml>   # Elimina recursos definidos en el archivo
+kubectl diff -f FILE.yaml -n NAMESPACE    # Vista previa de cambios
+kubectl apply -f FILE.yaml -n NAMESPACE   # Aplica una configuración
+kubectl delete -f FILE.yaml -n NAMESPACE  # Elimina recursos del archivo
 ```
 
-## Acceso a Secrets y ConfigMaps
+## Inspeccionar Secrets y ConfigMaps
 
 ```bash
-kubectl get secrets                # Lista los secrets
-kubectl get secret <name> -o yaml # Ver secret completo
-kubectl get configmap             # Lista los config maps
-kubectl describe configmap <name> # Inspecciona un config map
+kubectl get secrets -n NAMESPACE              # Lista metadatos de secrets
+kubectl describe secret NAME -n NAMESPACE     # Muestra claves, no valores
+kubectl get configmap -n NAMESPACE            # Lista config maps
+kubectl describe configmap NAME -n NAMESPACE  # Inspecciona un config map
 ```
 
 ## Herramientas de Prueba
@@ -72,10 +80,12 @@ kubectl get nodes                 # Confirmar la comunicación con el clúster
 
 ## Limpieza
 
+Confirma `kubectl config current-context` y el namespace antes de ejecutar estos comandos.
+
 ```bash
-kubectl delete pod <pod-name>    # Eliminar un pod dañado
-kubectl delete svc <service>     # Eliminar un servicio
-kubectl delete deployment <dep>  # Eliminar un deployment
+kubectl delete pod POD_NAME -n NAMESPACE          # Eliminar un pod dañado
+kubectl delete svc SERVICE_NAME -n NAMESPACE      # Eliminar un servicio
+kubectl delete deployment DEPLOYMENT -n NAMESPACE # Eliminar un deployment
 ```
 
 ## Aliases
@@ -86,15 +96,15 @@ Agrega estos alias a tu `.bashrc` o `.zshrc` para ahorrar tiempo:
 alias k="kubectl"
 alias kgp="kubectl get pods"
 alias kaf="kubectl apply -f"
-alias kdf="kubectl delete -f"
+alias kdiff="kubectl diff -f"
 ```
 
 ---
 
 <div class="link-card">
-  <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands" target="_blank">
+  <a href="https://kubernetes.io/docs/reference/kubectl/generated/" target="_blank" rel="noopener noreferrer">
     <strong>📘 Official kubectl Command Reference</strong><br>
-    https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands
+    https://kubernetes.io/docs/reference/kubectl/generated/
   </a>
 </div>
 

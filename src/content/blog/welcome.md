@@ -2,19 +2,20 @@
 date = '2025-04-17T14:17:53-04:00'
 title = 'Welcome'
 slug = 'welcome'
+description = 'An introduction to my public notes on software, infrastructure, operations, and the tools I use.'
 +++
 
-# Hi 👋 
-
-This blog is currently **in progress**. Over the next few weeks, I’ll begin migrating many of my personal notes, experiments, and technical documentation from **Obsidian & Notion** to this public space — in hopes that some of it may help others too.
+This is my public notebook for practical lessons, experiments, and technical documentation
+from software, infrastructure, and operations work. I publish the parts that may help
+someone solve a similar problem or understand a tradeoff more clearly.
 <!--more-->
 
-Topics will range from:
+Topics include:
 
 - IT infrastructure, DevOps, homelabs  
 - Software development (Python, React, Django, etc.)  
 - Cybersecurity, networking, automation  
 - 3D printing, electronics, and side projects  
-- Some AI, LLMs, and personal growth  
+- AI, local language models, and developer tools
 
-Thanks for stopping by. More coming soon..
+Thanks for stopping by.

@@ -12,7 +12,7 @@ This cheatsheet is built from my notes collected over time. Can apply to Postgre
 
 ## SELECT Statements
 
-```SQL
+```sql
 -- Select everything from a table
 SELECT * FROM Country;
 
@@ -37,7 +37,7 @@ SELECT DISTINCT Continent FROM Country;
 
 ## Filtering with WHERE
 
-```SQL
+```sql
 -- Filter by multiple conditions
 SELECT Name, Continent, Population 
 FROM Country 
@@ -55,7 +55,7 @@ SELECT Name FROM Country WHERE Name LIKE '_a%' ORDER BY Name;
 
 ## INSERT Statements
 
-```SQL
+```sql
 -- Insert data into specified columns
 INSERT INTO customer (name, city, state) 
 VALUES ('Jimi', 'Renton', 'WA');
@@ -69,7 +69,7 @@ SELECT id, name, description FROM item;
 
 ## UPDATE and DELETE
 
-```SQL
+```sql
 -- Update specific fields by ID
 UPDATE customer 
 SET address = '123 music ave', zip = '98056' 
@@ -83,7 +83,7 @@ DELETE FROM customer WHERE id = 5;
 
 ## Table Structure
 
-```SQL
+```sql
 -- Drop table if it exists
 DROP TABLE IF EXISTS test;
 
@@ -95,7 +95,7 @@ ALTER TABLE test ADD columna TEXT DEFAULT 'panda';
 
 ## JOIN Statements
 
-```SQL
+```sql
 -- Inner Join
 SELECT customers.name, orders.amount 
 FROM customers 
@@ -121,7 +121,7 @@ FULL OUTER JOIN orders ON customers.id = orders.customer_id;
 
 ## Aggregation & Grouping
 
-```SQL
+```sql
 -- Group data and get counts
 SELECT Continent, COUNT(*) as total_countries 
 FROM Country 
@@ -137,7 +137,7 @@ GROUP BY Region;
 
 ## Other Useful Commands
 
-```SQL
+```sql
 -- Find max/min values
 SELECT MAX(Population), MIN(LifeExpectancy) FROM Country;
 

@@ -5,6 +5,9 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://jfrancolopez.com',
   integrations: [sitemap()],
+  markdown: {
+    syntaxHighlight: 'prism',
+  },
   security: {
     // GitHub Pages can't send security headers, so Astro writes a Content-Security-Policy
     // <meta> tag into every page, with hashes for the scripts and styles it renders.
@@ -19,11 +22,6 @@ export default defineConfig({
         "form-action 'self'",
         'upgrade-insecure-requests',
       ],
-      styleDirective: {
-        // Blog code blocks (Shiki) color syntax with inline style="" attributes. Allow those
-        // attributes only; <style> elements and all scripts stay hash-restricted.
-        resources: ["'self'", { resource: "'unsafe-inline'", kind: 'attribute' }],
-      },
     },
   },
 });

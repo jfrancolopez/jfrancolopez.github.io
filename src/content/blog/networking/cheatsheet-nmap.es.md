@@ -7,6 +7,11 @@ tags = ['nmap', 'networking', 'cheatsheet']
 
 
 Aqui dejo una lista de perfiles de escaneo Nmap que he utilizado. Me ha ayudado para descubrir hosts, detectar servicios, encontrar puertos abiertos, trazar rutas y detectar firewalls.
+
+Escanea únicamente sistemas propios o aquellos para los que tengas autorización explícita.
+La autorización debe cubrir todos los equipos involucrados, incluido el "zombie" de un
+idle scan. Revisa cada script NSE antes de usarlo; algunos son intrusivos o disruptivos
+aunque el escaneo sea lento.
 <!--more-->
 
 ---
@@ -17,10 +22,10 @@ Aqui dejo una lista de perfiles de escaneo Nmap que he utilizado. Me ha ayudado 
 # Listar interfaces de red en el host que escanea
 nmap --iflist
 
-# Escaneo ICMP para encontrar hosts activos
+# Descubrimiento sin escanear puertos; las pruebas varían según red y privilegios
 nmap -sn 192.168.1.0/24
 
-# Saltar firewalls con SYN y ACK en lugar de ICMP
+# Probar descubrimiento TCP SYN y ACK cuando ICMP está bloqueado
 nmap -PS -PA 192.168.1.1
 
 # Descubrir hosts con ARP (solo en red LAN)
@@ -35,7 +40,7 @@ nmap -PR 192.168.1.0/24
 # Escaneo básico de los primeros 1000 puertos
 nmap TARGET
 
-# Escaneo rápido de los 300 puertos más comunes
+# Escaneo rápido de los 100 puertos más comunes
 nmap -F TARGET
 
 # Escaneo completo de todos los puertos TCP
@@ -44,7 +49,7 @@ nmap -p- TARGET
 # Escaneo completo UDP
 nmap -sU -p- TARGET
 
-# Escaneo FIN TCP (más sigiloso)
+# Escaneo FIN TCP (sigue siendo detectable)
 nmap -sF TARGET
 
 # Escaneo ACK TCP (verifica si hay firewall)
@@ -56,10 +61,10 @@ nmap -sX TARGET
 # Escaneo Null (sin banderas TCP)
 nmap -sN TARGET
 
-# Escaneo Idle (completamente sigiloso)
+# Escaneo Idle (requiere autorización para el zombie y el objetivo)
 nmap -sI ZOMBIE_IP TARGET
 
-# Escaneo lento para evitar detección
+# Temporización lenta; no vuelve invisible el escaneo
 nmap -T1 TARGET
 ```
 
@@ -74,7 +79,7 @@ nmap -sV TARGET
 # Detección de sistema operativo + traceroute
 nmap -O --traceroute TARGET
 
-# Escaneo "seguro" en puertos web
+# Limitar las pruebas a puertos web; aún requiere autorización
 nmap -O -p 80,443 TARGET
 
 # Escaneo agresivo
@@ -92,8 +97,8 @@ nmap -sC TARGET
 # Ejecutar script específico
 nmap --script=http-title TARGET
 
-# Ejecutar todos los scripts disponibles
-nmap --script=all TARGET
+# Ejecutar la categoría "safe" después de revisar su lista actual
+nmap --script=safe TARGET
 
 # Escaneo con vulscan
 nmap -sV --script=vulscan/vulscan.nse TARGET
@@ -138,8 +143,8 @@ nmap -oA scan_result TARGET
 
 ```bash
 nmap_open_ports:         escaneo de puertos abiertos
-dnmap_list_interfaces:   lista interfaces locales (nmap --iflist)
-nmap_slow:               escaneo lento y sigiloso (nmap -T1)
+nmap_list_interfaces:    lista interfaces locales (nmap --iflist)
+nmap_slow:               temporización lenta, aún detectable (nmap -T1)
 nmap_fin:                escaneo TCP FIN (nmap -sF)
 nmap_full:               escaneo completo agresivo (nmap -p- -A)
 nmap_check_for_firewall: escaneo ACK (nmap -sA)
@@ -150,12 +155,14 @@ nmap_check_for_vulns:    script vulscan (nmap -sV --script=vulscan)
 nmap_full_udp:           escaneo completo UDP (nmap -sU -p-)
 nmap_traceroute:         habilitar traceroute (nmap --traceroute)
 nmap_full_with_scripts:  escaneo completo con scripts (nmap -p- -A -sC)
-nmap_web_safe_osscan:    detección usando solo puertos web (nmap -O -p 80,443)
-nmap_ping_scan:          escaneo ICMP (nmap -sn)
+nmap_web_ports_osscan:   detección limitada a puertos web (nmap -O -p 80,443)
+nmap_ping_scan:          descubrimiento sin escaneo de puertos (nmap -sn)
 ```
 
 ---
 
-Recuerda que algunos escaneos (por ejemplo `-A`, `--script`, `-sU`, `-p-`) son muy ruidosos y pueden activar firewalls o sistemas de alerta.
+Los escaneos como `-A`, `--script`, `-sU` y `-p-` pueden generar mucho tráfico, activar
+defensas o afectar servicios frágiles. Evita `--script=all`; selecciona scripts explícitos,
+revísalos y pruébalos en un laboratorio antes de usarlos en producción con autorización.
 
 — Franco
